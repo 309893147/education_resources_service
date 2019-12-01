@@ -1,0 +1,25 @@
+package com.lss.education_resources_service.bean.entity.user;
+
+import com.lss.education_resources_service.util.BaseEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+
+import javax.persistence.Entity;
+
+@Data
+@Entity
+@ApiModel(value = "UserCollect",description = "用户收藏表")
+public class UserCollect extends BaseEntity {
+
+
+    @ApiModelProperty(value = "类别标题")
+    private String title;
+
+    @ApiModelProperty(value = "类别图片")
+    private String icon;
+
+    @ApiModelProperty(value = "类别顺序")
+    private Integer sort;
+
+}
