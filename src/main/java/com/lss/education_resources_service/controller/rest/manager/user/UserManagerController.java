@@ -47,4 +47,8 @@ public class UserManagerController {
         return  API.ok(userService.getUser());
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7e20bb064d305d40054f97300687a0935958cbaf
 }
