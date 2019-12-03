@@ -1,6 +1,5 @@
-package com.lss.education_resources_service.util;
+package com.lss.education_resources_service.util.respons;
 
-import com.lss.education_resources_service.exception.APIError;
 import lombok.Data;
 
 @Data

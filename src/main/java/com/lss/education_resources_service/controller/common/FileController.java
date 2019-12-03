@@ -1,7 +1,7 @@
 package com.lss.education_resources_service.controller.common;
 
 import com.lss.education_resources_service.service.UploadService;
-import com.lss.education_resources_service.util.API;
+import com.lss.education_resources_service.util.respons.API;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

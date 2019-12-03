@@ -7,7 +7,7 @@ import com.lss.education_resources_service.bean.entity.user.User;
 import com.lss.education_resources_service.service.BaseService;
 import com.lss.education_resources_service.service.FeedbackService;
 import com.lss.education_resources_service.service.UploadService;
-import com.lss.education_resources_service.util.API;
+import com.lss.education_resources_service.util.respons.API;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,6 @@ public class FeedbackAPI extends BaseService {
 
     @PostMapping
     @ApiOperation(value = "提交意见反馈（json方式)", notes = "只需要提交 content:String contact:String{mail,phone} type:[MACHINE_BUG,COMMON] 字段,images:图片链接,extra:当type为MACHINE_BUG的时候必填，值为机器编码")
-
     public API<Feedback> addFeedback(@RequestBody Feedback feedback) {
         User user = super.getCurrentUser();
         feedback.setUserId(user.getId());

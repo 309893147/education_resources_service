@@ -188,4 +188,6 @@ public class RedisCache
         Map<String, T> map = redisTemplate.opsForHash().entries(key);
         return map;
     }
+
+
 }

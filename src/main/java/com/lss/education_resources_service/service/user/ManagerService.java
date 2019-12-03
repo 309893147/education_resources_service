@@ -3,7 +3,7 @@ package com.lss.education_resources_service.service.user;
 import com.lss.education_resources_service.bean.entity.user.User;
 import com.lss.education_resources_service.exception.APIError;
 import com.lss.education_resources_service.framework.redis.RedisCache;
-import com.lss.education_resources_service.repository.UserRepository;
+import com.lss.education_resources_service.datasource.repository.UserRepository;
 import com.lss.education_resources_service.service.BaseService;
 import com.lss.education_resources_service.util.Digests;
 import com.lss.education_resources_service.util.Encodes;
@@ -47,9 +47,9 @@ public class ManagerService extends BaseService {
 
 
 
-    public HashMap<String, Object> saveDetail(String phone, String avatar, Integer gender, String userName, Timestamp birthday) {
+    public HashMap<String, Object> saveDetail(String mobile, String avatar, Integer gender, String userName, Timestamp birthday) {
         User user = new User();
-        user.setPhone(phone);
+        user.setMobile(mobile);
         user.setAvatar(avatar);
         user.setGender(gender);
         user.setUsername(userName);
@@ -140,8 +140,8 @@ public class ManagerService extends BaseService {
         System.out.println(s);
     }
 
-    public HashMap<String, Object> login(String username, String password) {
-        User user = userRepository.queryByUserName(username);
+    public HashMap<String, Object> login(String mobile, String password) {
+        User user = userRepository.queryByMobile(mobile);
         if (user == null) {
             APIError.e(400, "用户不存在");
         }

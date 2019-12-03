@@ -1,7 +1,7 @@
 package com.lss.education_resources_service.service;
 
 import com.lss.education_resources_service.bean.entity.feedback.Feedback;
-import com.lss.education_resources_service.repository.FeedBackRepository;
+import com.lss.education_resources_service.datasource.repository.FeedBackRepository;
 import org.springframework.stereotype.Service;
 
 @Service

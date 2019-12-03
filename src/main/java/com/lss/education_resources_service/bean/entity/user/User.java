@@ -3,6 +3,7 @@ package com.lss.education_resources_service.bean.entity.user;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.lss.education_resources_service.util.BaseEntity;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.models.auth.In;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -35,13 +36,11 @@ public class User extends BaseEntity {
 
     @Column(unique = true,length =15)
     @ApiModelProperty(value = "电话")
-    private String phone;
+    private String mobile;
 
     @ApiModelProperty(value = "邮箱")
     private String email;
 
-    @ApiModelProperty(value = "角色")
-    private String role;
 
     @ApiModelProperty(value = "剩余积分")
     private Integer integral;
@@ -49,8 +48,13 @@ public class User extends BaseEntity {
     @ApiModelProperty(value = "总积分")
     private Integer integralTotal;
 
-    @Transient
-    private String permissions;
+    /**
+     * 角色 ID
+     */
+    @ApiModelProperty(value = "角色id")
+    private Integer roleId;
 
+
+    private String roleName;
 
 }

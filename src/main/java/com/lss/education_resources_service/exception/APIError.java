@@ -25,6 +25,11 @@ public class APIError {
         e(401,"需求登录");
     }
 
+    public static void NOTEMPTY(){
+        e(401,"不能为空");
+    }
+
+
     public static void e(Integer code, String msg) {
         APIError error = new APIError();
         error.setStatus(code);
@@ -32,4 +37,6 @@ public class APIError {
         LoggerUtils.log.info(JSONObject.toJSONString(error));
         throw new APIException(error);
     }
+
+
 }

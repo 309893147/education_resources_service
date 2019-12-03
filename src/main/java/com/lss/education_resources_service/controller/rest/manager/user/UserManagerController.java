@@ -1,18 +1,19 @@
 package com.lss.education_resources_service.controller.rest.manager.user;
 
-import com.lss.education_resources_service.annotation.AnonUrl;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lss.education_resources_service.bean.entity.user.User;
+import com.lss.education_resources_service.service.febs.ManagerUserService;
+import com.lss.education_resources_service.service.febs.RoleService;
 import com.lss.education_resources_service.service.user.UserService;
-import com.lss.education_resources_service.util.API;
+import com.lss.education_resources_service.util.respons.API;
+import com.lss.education_resources_service.util.respons.PageForm;
+import com.lss.education_resources_service.util.respons.PageResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 @RestController
 @RequestMapping("/manager/user")
@@ -22,11 +23,28 @@ public class UserManagerController {
     UserService userService;
 
 
-    @AnonUrl
-    @PostMapping("/login")
-    @ApiOperation(value = "用户登录",notes = "用户登录传userName与password")
-    public API<Map<String,Object>> login(@RequestParam("username")String username, @RequestParam("password")String password){
-        HashMap<String,Object> map = userService.login(username,password);
-        return API.ok(map);
+    @Autowired
+    ManagerUserService managerUserService;
+
+    @Autowired
+    RoleService roleService;
+
+
+    /**
+     * 管理员列表
+     */
+    @GetMapping("/managerList")
+    public API<PageResult<User>> managerList(PageForm pageForm) {
+        Page<User> page=new Page<>(pageForm.getPageNum(),pageForm.getPageSize());
+
+        List<User> userList = managerUserService.queryByPage(page);
+        return API.ok(PageResult.of(userList,page));
     }
+
+    @GetMapping("/userinfo")
+    @ApiOperation(value = "获取当前登录用户")
+    public API<User> getCurrUser() {
+        return  API.ok(userService.getUser());
+    }
+
 }
