@@ -9,20 +9,17 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.lss</groupId>
-    <artifactId>education_resources_service</artifactId>
+    <artifactId>education_service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>education_resources_service</name>
+    <name>education_service</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
         <java.version>1.8</java.version>
+        <lss.verion>0.0.6</lss.verion>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -35,33 +32,33 @@
         </dependency>
 
         <!--jpa specification-->
-        <dependency>
-            <groupId>com.github.wenhao</groupId>
-            <artifactId>jpa-spec</artifactId>
-            <version>3.2.3</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.github.wenhao</groupId>-->
+<!--            <artifactId>jpa-spec</artifactId>-->
+<!--            <version>3.2.3</version>-->
+<!--        </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter -->
-        <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>2.1.0</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.mybatis.spring.boot</groupId>-->
+<!--            <artifactId>mybatis-spring-boot-starter</artifactId>-->
+<!--            <version>2.1.0</version>-->
+<!--        </dependency>-->
 
         <!--数据库-->
 
 
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.1.17</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.alibaba</groupId>-->
+<!--            <artifactId>druid-spring-boot-starter</artifactId>-->
+<!--            <version>1.1.17</version>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.2.0</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.baomidou</groupId>-->
+<!--            <artifactId>mybatis-plus-boot-starter</artifactId>-->
+<!--            <version>3.2.0</version>-->
+<!--        </dependency>-->
 
         <!--<dependency>-->
             <!--<groupId>commons-lang</groupId>-->
@@ -91,11 +88,11 @@
             <version>2.6</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.58</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.alibaba</groupId>-->
+<!--            <artifactId>fastjson</artifactId>-->
+<!--            <version>1.2.58</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -150,22 +147,34 @@
             <optional>true</optional>
         </dependency>
 
-        <!--shiro -->
         <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-core</artifactId>
-            <version>1.2.3</version>
+            <groupId>com.lss</groupId>
+            <artifactId>auth</artifactId>
+            <version>${lss.verion}</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-web</artifactId>
-            <version>1.2.3</version>
+            <groupId>com.lss</groupId>
+            <artifactId>config</artifactId>
+            <version>${lss.verion}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-spring</artifactId>
-            <version>1.2.3</version>
+            <groupId>com.lss</groupId>
+            <artifactId>meta</artifactId>
+            <version>${lss.verion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.lss</groupId>
+            <artifactId>oss</artifactId>
+            <version>${lss.verion}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.lss</groupId>
+            <artifactId>notification</artifactId>
+            <version>${lss.verion}</version>
         </dependency>
 
 
