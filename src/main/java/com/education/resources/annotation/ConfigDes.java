@@ -1,5 +1,7 @@
 package com.education.resources.annotation;
 
+
+import com.education.resources.bean.config.ConfigContentType;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -14,8 +16,14 @@ public @interface ConfigDes {
     String description() default "";
 
 
-    String  type() default "string";
+    ConfigContentType type() default ConfigContentType.TEXT;
+
+    String  test() default "";
+
+    String  defaultValue();
 
     boolean  require() default false;
+
+
 
 }

@@ -1,7 +1,6 @@
 package com.education.resources.bean.entity;
 
 import com.education.resources.bean.entity.user.User;
-import com.lss.jpa.entity.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -20,11 +19,11 @@ public class ResourceComment extends BaseEntity {
     @ApiModelProperty(value = "用户Id")
     private Integer userId;
 
-    @ApiModelProperty(value = "分类图标")
-    private Integer  depth = 0;
-
-    @ApiModelProperty(value = "评论父Id")
-    private Integer parent;
+//    @ApiModelProperty(value = "分类图标")
+//    private Integer  depth = 0;
+//
+//    @ApiModelProperty(value = "评论父Id")
+//    private Integer parent;
 
     @ApiModelProperty(value = "用户")
     @ManyToOne
@@ -32,18 +31,18 @@ public class ResourceComment extends BaseEntity {
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private User user;
 
-    @ApiModelProperty(value = "评论")
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "parent",referencedColumnName = "id",insertable = false,updatable = false)
-    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
-    private List<ResourceComment> sub;
+//    @ApiModelProperty(value = "评论")
+//    @OneToMany(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "parent",referencedColumnName = "id",insertable = false,updatable = false)
+//    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
+//    private List<ResourceComment> sub;
 
     @ApiModelProperty(value = "资源id")
     private Integer resourceId;
 
-    @ApiModelProperty(value = "资源")
-    @ManyToOne(fetch = FetchType.EAGER)
-    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
-    @JoinColumn(name = "resourceId",referencedColumnName = "id",insertable = false,updatable = false)
-    private Resource  resource;
+//    @ApiModelProperty(value = "资源")
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
+//    @JoinColumn(name = "resourceId",referencedColumnName = "id",insertable = false,updatable = false)
+//    private Resource  resource;
 }

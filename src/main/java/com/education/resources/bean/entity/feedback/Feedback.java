@@ -1,13 +1,12 @@
 package com.education.resources.bean.entity.feedback;
 
-import com.lss.jpa.entity.BaseEntity;
-import com.lss.meta.annotation.DeleteType;
-import com.lss.meta.annotation.EditType;
-import com.lss.meta.annotation.Meta;
+import com.education.resources.annotation.DeleteType;
+import com.education.resources.annotation.EditType;
+import com.education.resources.annotation.Meta;
+import com.education.resources.bean.entity.BaseEntity;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-
 import javax.persistence.Entity;
 
 @Entity

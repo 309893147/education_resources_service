@@ -3,7 +3,7 @@ package com.education.resources.controller.rest.api;
 
 import com.education.resources.bean.entity.feedback.Feedback;
 import com.education.resources.service.FeedbackService;
-import com.lss.rest.API;
+import com.education.resources.util.rest.API;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

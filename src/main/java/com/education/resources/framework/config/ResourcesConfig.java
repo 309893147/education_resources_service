@@ -1,8 +1,8 @@
 package com.education.resources.framework.config;
 
 
-import com.lss.auth.config.AuthResourceConfig;
-import com.lss.auth.repository.PermissionRepository;
+import com.education.resources.config.auth.AuthResourceConfig;
+import com.education.resources.datasource.repository.auth.PermissionRepository;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Configuration;

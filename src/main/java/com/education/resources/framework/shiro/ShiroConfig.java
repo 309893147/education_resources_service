@@ -1,7 +1,7 @@
 package com.education.resources.framework.shiro;
 
 
-import com.lss.auth.filter.ManagerTokenFilter;
+import com.education.resources.filter.ManagerTokenFilter;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.context.annotation.Bean;
@@ -24,14 +24,14 @@ public class ShiroConfig {
         ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
         Map<String, Filter> filterMap = new HashMap<>();
         filterMap.put("token",tokenFilter);
-
+        filterMap.put("apiToken",new UserApiFilter());
         factoryBean.setFilters(filterMap);
         factoryBean.setSecurityManager(securityManager);
 
         Map<String, String> filterRuleMap = new HashMap<>();
         filterRuleMap.put("/api/**", "anon");
-        filterRuleMap.put("/manage/**", "token");
-//        filterRuleMap.put("/manage/**", "anon");
+//        filterRuleMap.put("/manage/**", "token");
+        filterRuleMap.put("/manage/**", "anon");
         filterRuleMap.put("/api/user/login","anon");
         filterRuleMap.put("/unauthorized/**", "anon");
         filterRuleMap.put("/**", "anon");

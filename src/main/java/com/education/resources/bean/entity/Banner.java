@@ -1,9 +1,14 @@
 package com.education.resources.bean.entity;
 
-import com.lss.jpa.entity.BaseEntity;
+import com.education.resources.annotation.DeleteType;
+import com.education.resources.annotation.EditType;
+import com.education.resources.annotation.Meta;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.NotEmpty;
 
 /**
@@ -11,25 +16,42 @@ import javax.validation.constraints.NotEmpty;
  * banner
  */
 @Entity
-public class Banner  extends BaseEntity {
+@Data
+@Meta(delete = DeleteType.DELETE_BOTH,edit = EditType.EDIT)
+public class Banner extends BaseEntity {
 
     @NotEmpty(message = "标题不能为空")
     @ApiModelProperty(value = "轮播标题")
-    private String  title;
+    @Meta(displayInList = true)
+    private String title;
 
     @NotEmpty(message = "请设置图片")
     @ApiModelProperty(value = "轮播图片")
-    private String  img;
+    @Meta(displayInList = true)
+    private String headImg;
+
+    @NotEmpty(message = "请输入内容")
+    @ApiModelProperty(value = "内容")
+    @Meta(displayInList = true)
+    private String content;
 
     @ApiModelProperty(value = "轮播类型")
-    private Integer type;
+    @Enumerated(EnumType.STRING)
+    @Meta(displayInList = true)
+    private Type type;
 
     @ApiModelProperty(value = "轮播跳转路径")
-    private String  target;
+    @Meta(displayInList = true)
+    private String target;
 
-    @ApiModelProperty(value = "状态")
-    private Integer status;
+    @ApiModelProperty(value = "是否启用")
+    @Meta(displayInList = true)
+    private boolean joinUse;
 
-    @ApiModelProperty(value = "排序")
-    private Integer  sort;
+    public enum Type {
+        VIDEO,
+        IMG
+    }
+
+
 }

@@ -1,6 +1,5 @@
 package com.education.resources.bean.entity;
 
-import com.lss.jpa.entity.BaseEntity;
 import lombok.Data;
 
 import javax.persistence.Entity;

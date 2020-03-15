@@ -31,30 +31,90 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
-        <!--jpa specification-->
-<!--        <dependency>-->
-<!--            <groupId>com.github.wenhao</groupId>-->
-<!--            <artifactId>jpa-spec</artifactId>-->
-<!--            <version>3.2.3</version>-->
-<!--        </dependency>-->
+        <!--反射工具包-->
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.11</version>
+        </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter -->
-<!--        <dependency>-->
-<!--            <groupId>org.mybatis.spring.boot</groupId>-->
-<!--            <artifactId>mybatis-spring-boot-starter</artifactId>-->
-<!--            <version>2.1.0</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring-boot-web-starter</artifactId>
+            <version>1.4.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
+
+        <!--jpa specification-->
+        <dependency>
+            <groupId>com.github.wenhao</groupId>
+            <artifactId>jpa-spec</artifactId>
+            <version>3.2.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <version>2.1.7.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>2.1.0</version>
+        </dependency>
 
         <!--数据库-->
 
 
-<!--        <dependency>-->
-<!--            <groupId>com.alibaba</groupId>-->
-<!--            <artifactId>druid-spring-boot-starter</artifactId>-->
-<!--            <version>1.1.17</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>1.1.17</version>
+        </dependency>
 
-<!--        <dependency>-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.58</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.taobao.top</groupId>
+            <artifactId>top-api-sdk-dev</artifactId>
+            <version>ding-open-mc-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${pom.basedir}/src/lib/taobao-sdk-java-auto_1479188381469-20191217.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-quartz</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.5</version>
+        </dependency>
+
+        <!--        <dependency>-->
 <!--            <groupId>com.baomidou</groupId>-->
 <!--            <artifactId>mybatis-plus-boot-starter</artifactId>-->
 <!--            <version>3.2.0</version>-->
@@ -147,36 +207,19 @@
             <optional>true</optional>
         </dependency>
 
-        <dependency>
-            <groupId>com.lss</groupId>
-            <artifactId>auth</artifactId>
-            <version>${lss.verion}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.lss</groupId>
-            <artifactId>config</artifactId>
-            <version>${lss.verion}</version>
-        </dependency>
 
         <dependency>
-            <groupId>com.lss</groupId>
-            <artifactId>meta</artifactId>
-            <version>${lss.verion}</version>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>6.0.11</version>
         </dependency>
 
+        <!--腾讯短信服务-->
         <dependency>
-            <groupId>com.lss</groupId>
-            <artifactId>oss</artifactId>
-            <version>${lss.verion}</version>
+            <groupId>com.github.qcloudsms</groupId>
+            <artifactId>qcloudsms</artifactId>
+            <version>1.0.6</version>
         </dependency>
-
-
-        <dependency>
-            <groupId>com.lss</groupId>
-            <artifactId>notification</artifactId>
-            <version>${lss.verion}</version>
-        </dependency>
-
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
