@@ -41,6 +41,7 @@ public class Resource extends BaseEntity {
     @Meta(displayInList = true, searchable = true)
     private String title;
 
+    @Lob
     @ApiModelProperty(value = "正文")
     private String content;
 

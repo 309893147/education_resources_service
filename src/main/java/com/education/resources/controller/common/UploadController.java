@@ -1,6 +1,8 @@
 package com.education.resources.controller.common;
 
+import com.education.resources.bean.entity.ResourceFile;
 import com.education.resources.config.oss.MinioConfig;
+import com.education.resources.service.ResourceFileService;
 import com.education.resources.service.oss.OssService;
 import com.education.resources.util.rest.API;
 import io.minio.MinioClient;
@@ -27,19 +29,22 @@ public class UploadController {
     @Resource(name = "MinioOssService")
     private OssService<MinioConfig, MinioClient> minioOssService;
 
+    @Autowired
+    ResourceFileService filesService;
 
-//    @PostMapping("/business")
-//    @ApiOperation(value = "上传业务文件", notes = "获取上传路径")
-//    public API<RenheFile> uploadBusinessFile(MultipartFile file){
-//        String fileSaveName = getFileName("business", file);
-//        RenheFile  renheFile = new RenheFile();
-//        minioOssService.uploadFile(fileSaveName,file);
-//        renheFile.setName(file.getOriginalFilename());
-//        renheFile.setMime(file.getContentType());
-//        renheFile.setPath(fileSaveName);
-//        //返回文件访问路径
-//        return API.ok(filesService.saveFiles(renheFile));
-//    }
+
+    @PostMapping("/resource")
+    @ApiOperation(value = "上传教学资源文件", notes = "获取上传路径")
+    public API<ResourceFile> uploadResourceFile(MultipartFile file){
+        String fileSaveName = getFileName("resource", file);
+        ResourceFile renheFile = new ResourceFile();
+        minioOssService.uploadFile(fileSaveName,file);
+        renheFile.setName(file.getOriginalFilename());
+        renheFile.setMime(file.getContentType());
+        renheFile.setPath(fileSaveName);
+        //返回文件访问路径
+        return API.ok(filesService.saveFiles(renheFile));
+    }
 
 
 //    @ApiOperation("/test")

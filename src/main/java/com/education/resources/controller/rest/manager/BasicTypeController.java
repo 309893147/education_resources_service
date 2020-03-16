@@ -22,14 +22,14 @@ public class BasicTypeController {
     @Autowired
     BasicTypeService basicTypeService;
 
-    private API<Page> getList(BasicType basicType, PageForm pageForm, BasicType.Type type){
+    public API<Page> getList(BasicType basicType, PageForm pageForm, BasicType.Type type){
         basicType.setType(type);
         return API.ok(basicTypeService.list(basicType, pageForm));
     }
 
     @GetMapping(value = "/detail")
     @ApiOperation(value = "根据id查询")
-    private API<BasicType> getOne(Integer id){
+    public API<BasicType> getOne(Integer id){
         return API.ok(basicTypeService.getOne(id));
     }
 
