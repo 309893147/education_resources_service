@@ -13,6 +13,4 @@ public class SystemConfig {
     @ConfigDes(title = "域名",defaultValue = "refactor.renhe.demo.cq1080.com",require = true,description = "如cq1080.com")
     private ConfigProperty  domain;
 
-    @ConfigDes(title = "域名",defaultValue = "refactor.renhe.demo.cq1080.com",require = true,description = "如cq1080.com")
-    private ConfigProperty domain2;
 }

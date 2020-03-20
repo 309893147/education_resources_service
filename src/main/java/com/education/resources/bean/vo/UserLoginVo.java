@@ -8,9 +8,9 @@ import java.io.Serializable;
 
 @Data
 @Builder
-public class UserLoginVo implements Serializable {
+public class UserLoginVo<T> implements Serializable {
 
     private String token;
 
-    private User data;
+    private T data;
 }

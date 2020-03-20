@@ -9,6 +9,7 @@ import lombok.Data;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Lob;
 import javax.validation.constraints.NotEmpty;
 
 /**
@@ -32,6 +33,7 @@ public class Banner extends BaseEntity {
 
     @NotEmpty(message = "请输入内容")
     @ApiModelProperty(value = "内容")
+    @Lob
     @Meta(displayInList = true)
     private String content;
 

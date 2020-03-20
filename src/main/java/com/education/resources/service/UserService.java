@@ -26,18 +26,20 @@ public class UserService extends BaseService{
 	@Autowired
 	RedisCache redisCache;
 
-	public UserLoginVo addWXUser(User user) {
-		if(user.getId() == null && userRepository.count(Specifications.<User>and().eq("openId",user.getOpenId()).build())>0){
-			System.out.println("获取redis缓存");
-			User myUser = userRepository.findOne(Specifications.<User>and().eq("openId", user.getOpenId()).build()).orElse(null);
-			UserLoginVo cacheObject = redisCache.getCacheObject("userToken_" + user.getOpenId());
-			UserLoginVo vo = UserLoginVo.builder().token(cacheObject.getToken()).data(myUser).build();
-			return vo;
-		}
+	public UserLoginVo<User> addWXUser(User user) {
+//		if(user.getId() == null && userRepository.count(Specifications.<User>and().eq("openId",user.getOpenId()).build())>0){
+//			System.out.println("获取redis缓存");
+//			User myUser = userRepository.findOne(Specifications.<User>and().eq("openId", user.getOpenId()).build()).orElse(null);
+//			UserLoginVo<User> cacheObject = redisCache.getCacheObject("userToken_" + user.getOpenId());
+//			UserLoginVo<User> vo = UserLoginVo.<User>builder().token(cacheObject.getToken()).data(myUser).build();
+//			return vo;
+//		}
+		User item = userRepository.save(user);
+		String token = UUID.randomUUID().toString().replaceAll("-", "");
+
 		//加入缓存
-		UserLoginVo vo = UserLoginVo.builder().token(user.getOpenId()).data(user).build();
-		redisCache.setCacheObject("userToken_"+user.getOpenId(),vo);
-		userRepository.saveAndFlush(user);
+		UserLoginVo<User> vo = UserLoginVo.<User>builder().token(token).data(item).build();
+		redisCache.setCacheObject("userToken_"+token,item);
 		return vo;
 	}
 

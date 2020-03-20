@@ -31,6 +31,12 @@ public class ResourceAPI {
         return API.ok(resouceService.getResource(resource, pageForm));
     }
 
+    @GetMapping(value = "my")
+    @ApiOperation(value = "获取我上传的教育资源")
+    public API<Page<Resource>> getMyResource(PageForm pageForm) {
+        return API.ok(resouceService.getMyResource(pageForm));
+    }
+
     @GetMapping(value = "detail")
     @ApiOperation(value = "教育资源列表")
     public API<Resource> getOne(Integer id){
@@ -54,9 +60,10 @@ public class ResourceAPI {
 
     @DeleteMapping
     @ApiOperation(value = "删除教育资源")
-    public API resourceDelete(@RequestParam String ids) {
-        resouceService.resourceDelete(ids);
+    public API resourceDelete(Integer id) {
+        resouceService.resourceDelete(id);
         return API.ok();
     }
+
 
 }

@@ -22,8 +22,8 @@ public class BannerAPI {
     BannerService bannerService;
 
     @GetMapping
-    public API<Page<Banner>> addFeedback(PageForm pageForm) {
-        return API.ok(bannerService.bannerList(pageForm));
+    public API<List<Banner>> getBanner() {
+        return API.ok(bannerService.bannerList());
     }
 
 }

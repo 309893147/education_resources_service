@@ -7,6 +7,7 @@ import com.education.resources.bean.vo.UserLoginVo;
 import com.education.resources.framework.redis.RedisCache;
 import com.education.resources.service.auth.AuthManagerService;
 import com.education.resources.service.config.ConfigService;
+import com.education.resources.util.rest.APIError;
 import com.github.wenhao.jpa.Specifications;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,10 +55,20 @@ public class BaseService  implements ApplicationContextAware {
     }
 
 
-    public UserLoginVo getCurrentUser() {
+    public User getCurrentUser() {
         String token = (String) getHeader("accessToken");
-        return redisCache.getCacheObject("userToken_"+token);
+        User user = redisCache.getCacheObject("userToken_" + token);
+        if (user == null){
+            APIError.NEED_LOGIN();
+        }
+        return user;
     }
+
+    public void updateCurrentUser(User user) {
+        String token = (String) getHeader("accessToken");
+        redisCache.setCacheObject("userToken_" + token, user);
+    }
+
 
     public Object getHeader(String key) {
         return getCurrentRequest().getHeader(key);

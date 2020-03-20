@@ -72,6 +72,8 @@ public class Resource extends BaseEntity {
     @Meta(displayInList = true)
     private Integer clickNumber = 0;
 
+    private Integer likes = 0;
+
 //    @ApiModelProperty(value = "评分")
 //    @Meta(displayInList = true)
 //    private float score;

@@ -25,11 +25,11 @@ public class BannerService extends BaseService {
         return bannerRepository.findAll(spec.build(), pageForm.pageRequest());
     }
 
-    public Page<Banner> bannerList(PageForm pageForm) {
+    public List<Banner> bannerList() {
         PredicateBuilder<Banner> spec = Specifications.<Banner>and();
         spec.eq("presenceStatus",1);
         spec.eq("joinUse",true);
-        return bannerRepository.findAll(spec.build(),pageForm.pageRequest());
+        return bannerRepository.findAll(spec.build());
     }
 
 

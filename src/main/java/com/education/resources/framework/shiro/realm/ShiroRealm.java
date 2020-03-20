@@ -56,11 +56,11 @@ public class ShiroRealm extends ManagerRealm {
 
         if (authenticationToken instanceof JwtToken){
             JwtToken token = (JwtToken) authenticationToken;
-            UserLoginVo user = userService.getCurrentUser();
-            if (user == null) {
-                APIError.NEED_LOGIN();
-            }
-            return new SimpleAuthenticationInfo(user, user.getToken(), this.getName());
+//            UserLoginVo user = userService.getCurrentUser();
+//            if (user == null) {
+//                APIError.NEED_LOGIN();
+//            }
+//            return new SimpleAuthenticationInfo(user, user.getToken(), this.getName());
         }
         return super.doGetAuthenticationInfo(authenticationToken);
     }
