@@ -9,6 +9,7 @@ import lombok.Data;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Lob;
 import javax.validation.constraints.NotEmpty;
 
 /**
@@ -32,13 +33,14 @@ public class Banner extends BaseEntity {
 
     @NotEmpty(message = "请输入内容")
     @ApiModelProperty(value = "内容")
+    @Lob
     @Meta(displayInList = true)
     private String content;
 
-    @ApiModelProperty(value = "轮播类型")
-    @Enumerated(EnumType.STRING)
-    @Meta(displayInList = true)
-    private Type type;
+//    @ApiModelProperty(value = "轮播类型")
+//    @Enumerated(EnumType.STRING)
+//    @Meta(displayInList = true)
+//    private Type type;
 
     @ApiModelProperty(value = "轮播跳转路径")
     @Meta(displayInList = true)
@@ -48,10 +50,10 @@ public class Banner extends BaseEntity {
     @Meta(displayInList = true)
     private boolean joinUse;
 
-    public enum Type {
-        VIDEO,
-        IMG
-    }
+//    public enum Type {
+//        VIDEO,
+//        IMG
+//    }
 
 
 }

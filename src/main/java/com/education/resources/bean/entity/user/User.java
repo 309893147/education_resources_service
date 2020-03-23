@@ -28,9 +28,9 @@ public class User extends BaseEntity {
     @Meta(displayInList = true)
     private Integer gender;
 
-    @ApiModelProperty(value = "生日")
-    @Meta(displayInList = true)
-    private Timestamp birthday;
+//    @ApiModelProperty(value = "生日")
+//    @Meta(displayInList = true)
+//    private Timestamp birthday;
 
     @ApiModelProperty(value = "城市")
     @Meta(displayInList = true)
@@ -40,8 +40,8 @@ public class User extends BaseEntity {
     @Meta(displayInList = true)
     private String country;
 
-    @ApiModelProperty(value = "语言")
-    private String language;
+//    @ApiModelProperty(value = "语言")
+//    private String language;
 
     @ApiModelProperty(value = "省市")
     private String province;
@@ -63,11 +63,13 @@ public class User extends BaseEntity {
     private String age;
 
 
-    @ApiModelProperty(value = "剩余积分")
-    private Integer integral;
+//    @ApiModelProperty(value = "剩余积分")
+//    private Integer integral;
+//
+//    @ApiModelProperty(value = "总积分")
+//    private Integer integralTotal;
 
-    @ApiModelProperty(value = "总积分")
-    private Integer integralTotal;
+    private String token;
 
 //    /**
 //     * 角色 ID

@@ -45,7 +45,7 @@ public class ResourceController {
         return API.ok(resouceService.resourceSave(resource));
     }
 
-    @PutMapping
+    @PostMapping(value = "review")
     @ApiOperation(value = "审核教育资源")
     @PermissionDes(menu = {"教育资源"}, name = "审核资源")
     public API<Resource> resourceReview(@RequestBody Resource resource) {

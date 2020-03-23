@@ -18,40 +18,37 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class UserService extends BaseService{
+public class UserService extends BaseService {
 
-	@Autowired
-	UserRepository userRepository;
+    @Autowired
+    UserRepository userRepository;
 
-	@Autowired
-	RedisCache redisCache;
+    @Autowired
+    RedisCache redisCache;
 
-	public UserLoginVo addWXUser(User user) {
-		if(user.getId() == null && userRepository.count(Specifications.<User>and().eq("openId",user.getOpenId()).build())>0){
-			System.out.println("获取redis缓存");
-			User myUser = userRepository.findOne(Specifications.<User>and().eq("openId", user.getOpenId()).build()).orElse(null);
-			UserLoginVo cacheObject = redisCache.getCacheObject("userToken_" + user.getOpenId());
-			UserLoginVo vo = UserLoginVo.builder().token(cacheObject.getToken()).data(myUser).build();
-			return vo;
-		}
-		//加入缓存
-		UserLoginVo vo = UserLoginVo.builder().token(user.getOpenId()).data(user).build();
-		redisCache.setCacheObject("userToken_"+user.getOpenId(),vo);
-		userRepository.saveAndFlush(user);
-		return vo;
-	}
+    public User addWXUser(User user) {
+        if (userRepository.count(Specifications.<User>and().eq("openId", user.getOpenId()).build()) > 0) {
+            User myUser = userRepository.findOne(Specifications.<User>and().eq("openId", user.getOpenId()).build()).orElse(null);
+            return myUser;
+        }
+        String token = UUID.randomUUID().toString().replaceAll("-", "");
+        user.setToken(token);
+        userRepository.save(user);
+        redisCache.setCacheObject("userToken_" + token, user);
+        return user;
+    }
 
-	public User updateUser(User user){
-		user.setPresenceStatus(1);
-		return userRepository.saveAndFlush(user);
-	}
+    public User updateUser(User user) {
+        user.setPresenceStatus(1);
+        return userRepository.saveAndFlush(user);
+    }
 
-	public Page<User> getUserList(User user, PageForm pageForm){
-		PredicateBuilder<User> spec = SpecificationUtil.filter(user);
-		return userRepository.findAll(spec.build(),pageForm.pageRequest());
-	}
+    public Page<User> getUserList(User user, PageForm pageForm) {
+        PredicateBuilder<User> spec = SpecificationUtil.filter(user);
+        return userRepository.findAll(spec.build(), pageForm.pageRequest());
+    }
 
-	public User getOne(Integer id){
-		return userRepository.findItemById(id);
-	}
+    public User getOne(Integer id) {
+        return userRepository.findItemById(id);
+    }
 }

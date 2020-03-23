@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import javax.persistence.Lob;
 import java.util.List;
 
 @Data
@@ -16,9 +17,11 @@ public class DingMsgForm extends BaseEntity {
     @ApiModelProperty(value = "首屏会话透出的展示内容")
     private String title;
 
+    @Lob
     @ApiModelProperty(value = "内容")
     private String content;
 
+    @Lob
     @ApiModelProperty(value = "link 消息内容。如果太长只会部分展示 markdown markdown格式的消息")
     private String text;
 

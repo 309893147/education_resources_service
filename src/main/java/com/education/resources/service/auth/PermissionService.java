@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
@@ -67,6 +68,8 @@ public class PermissionService{
     public List<Permission> getSelfPermission(){
         return getPermissionByUser(authManagerService.getCurrentManager().getId());
     }
+
+
 
     /**
      * 根据管理员id获取管理员权限
@@ -125,6 +128,39 @@ public class PermissionService{
 
 
         return menuList;
+    }
+
+    /**
+     * 保存管理员权限
+     * @param id
+     * @param permissions
+     */
+    public void saveManagerPermission(int id,List<Permission> permissions) {
+
+        Manager manager = managerRepository.findItemById(id);
+        Role  role =  null;
+        if (manager.getRoles().size() == 0){
+            role = createManagerRole(manager,permissions);
+        }else {
+            role = manager.getRoles().stream().findAny().get();
+            role.setPermissions(permissions);
+            role = editRole(role);
+        }
+        manager.setRoles(Collections.singletonList(role));
+        managerRepository.save(manager);
+    }
+
+    /**
+     * 创建管理角色
+     * @param manager
+     * @param permissions
+     * @return
+     */
+        private Role  createManagerRole(Manager manager,List<Permission> permissions){
+        Role  role = new Role();
+        role.setName(manager.getName()+"的账号");
+        role.setPermissions(permissions);
+        return editRole(role);
     }
 
     private void checkMyPermission(Collection<Menu> menus, List<Permission> permissions, boolean clear){

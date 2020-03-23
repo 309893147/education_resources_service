@@ -1,5 +1,6 @@
 package com.education.resources.controller.common;
 
+import com.education.resources.annotation.AnonUrl;
 import com.education.resources.bean.entity.ResourceFile;
 import com.education.resources.config.oss.MinioConfig;
 import com.education.resources.service.ResourceFileService;
@@ -33,6 +34,7 @@ public class UploadController {
     ResourceFileService filesService;
 
 
+    @AnonUrl
     @PostMapping("/resource")
     @ApiOperation(value = "上传教学资源文件", notes = "获取上传路径")
     public API<ResourceFile> uploadResourceFile(MultipartFile file){
@@ -53,6 +55,7 @@ public class UploadController {
 //        return API.ok(filesService.getFiles("LiveHouse/Document",1,HouseDocument.class));
 //    }
 
+    @AnonUrl
     @PostMapping
     public API<String> uploadFile(MultipartFile file){
 

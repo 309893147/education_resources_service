@@ -42,12 +42,12 @@ public class Resource extends BaseEntity {
     private String title;
 
     @Lob
-    @ApiModelProperty(value = "正文")
+    @ApiModelProperty(value = "简介")
+    @Meta(displayInList = true, searchable = true)
     private String content;
 
-    @ApiModelProperty(value = "描述")
-    @Meta(displayInList = true, searchable = true)
-    private String description;
+//    @ApiModelProperty(value = "简介")
+//    private String description;
 
     @ApiModelProperty(value = "分类Id")
     private Integer basicTypeId;
@@ -62,15 +62,14 @@ public class Resource extends BaseEntity {
     @Meta(displayInList = true, searchable = true)
     private Boolean recommend;
 
-    @ApiModelProperty(value = "是否加入banner")
-    private Boolean joinBanner;
-
     @ApiModelProperty(value = "是否显示")
     private Boolean status;
 
     @ApiModelProperty(value = "浏览量")
     @Meta(displayInList = true)
     private Integer clickNumber = 0;
+
+//    private Integer likes = 0;
 
 //    @ApiModelProperty(value = "评分")
 //    @Meta(displayInList = true)

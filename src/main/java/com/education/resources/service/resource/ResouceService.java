@@ -2,6 +2,7 @@ package com.education.resources.service.resource;
 
 import com.education.resources.bean.entity.Resource;
 import com.education.resources.bean.from.PageForm;
+import com.education.resources.bean.pojo.event.DingMessageEvent;
 import com.education.resources.datasource.repository.resource.ResourceRepository;
 import com.education.resources.service.BaseService;
 import com.education.resources.util.StringUtil;
@@ -30,8 +31,16 @@ public class ResouceService extends BaseService {
         return resourceRepository.findAll(spec.build(),pageForm.pageRequest());
     }
 
+    public Page<Resource> getMyResource(PageForm pageForm){
+        PredicateBuilder<Resource> spec = Specifications.<Resource>and().eq("presenceStatus", 1);
+        spec.eq("userId",getCurrentUser().getId());
+        return resourceRepository.findAll(spec.build(),pageForm.pageRequest());
+    }
+
     public Resource  getOne(Integer id){
-        return resourceRepository.findItemById(id);
+        Resource resource = resourceRepository.findItemById(id);
+        resource.setClickNumber(resource.getClickNumber()+1);
+        return resourceRepository.save(resource);
     }
 
     public Resource resourceSave(Resource resource) {
@@ -44,14 +53,22 @@ public class ResouceService extends BaseService {
     }
 
     public Resource wxResourceAdd(Resource resource) {
-        resource.setPresenceStatus(1);
-        resource.setBasicTypeId(183);
+//        resource.setPresenceStatus(1);
+        resource.setUserId(getCurrentUser().getId());
+        resource.setResourceStatus(Resource.ResourceStatus.UNPROCESSED);
+        sendEvent(DingMessageEvent.builder().content("\n用户:"+getCurrentUser().getNickName()+"添加了资源:\n"+resource.getTitle()+"\n请管理员尽快处理").build());
         return resourceRepository.save(resource);
     }
 
 
     public void resourceDelete(String ids) {
         resourceRepository.softDelete(StringUtil.toIntArray(ids));
+    }
+
+    public void resourceDelete(Integer id) {
+        Resource item = resourceRepository.findItemById(id);
+        item.setPresenceStatus(0);
+        resourceRepository.save(item);
     }
 
 }

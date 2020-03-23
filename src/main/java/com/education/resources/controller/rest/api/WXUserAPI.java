@@ -6,12 +6,18 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.education.resources.annotation.AnonUrl;
+import com.education.resources.bean.auth.Manager;
+import com.education.resources.bean.entity.ManagerApply;
 import com.education.resources.bean.entity.user.User;
+import com.education.resources.bean.from.ApplyManagerFrom;
 import com.education.resources.bean.vo.UserLoginVo;
 import com.education.resources.service.UserService;
+import com.education.resources.service.auth.AuthManagerService;
 import com.education.resources.util.HttpClientUtil;
 import com.education.resources.util.rest.API;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -24,18 +30,14 @@ import com.alibaba.fastjson.JSONObject;
 public class WXUserAPI {
 	@Autowired
 	UserService userService;
+
+	@Autowired
+	AuthManagerService userManagerService;
+
+	@AnonUrl
 	@ResponseBody
 	@PostMapping("/wxLogin")
 	public API wxLogin(String code) {
-		// 微信get地址
-		// https://api.weixin.qq.com/sns/
-		// jscode2session?
-		// appid=APPID&
-		// secret=SECRET&
-		// js_code=JSCODE&g
-		// rant_type=authorization_code
-
-		System.out.println("" + code);
 		String url = "https://api.weixin.qq.com/sns/jscode2session";
 		Map<String, String> param = new HashMap<String, String>();
 		param.put("appid", "wxc49e51168e1768aa");
@@ -53,8 +55,9 @@ public class WXUserAPI {
 
 	}
 
+	@AnonUrl
 	@PostMapping("/wxSaveUser")
-	public API<UserLoginVo> wxSaveUser(User user) {
+	public API<User> wxSaveUser(User user) {
 		return API.ok(userService.addWXUser(user));
 	}
 
@@ -67,4 +70,15 @@ public class WXUserAPI {
 	public API<User> findById(Integer id){
 		return API.ok(userService.getOne(id));
 	}
+
+	@ApiOperation("用户申请后台账号")
+	@PostMapping(value = "/user/manager")
+	public API<ManagerApply>  userApplyManager(@RequestBody ApplyManagerFrom applyManagerFrom){
+		ManagerApply userManager = userManagerService.createUserManager(applyManagerFrom);
+		if (userManager==null) {
+			return API.e("请完善个人资料电话号码,后台账号将根据电话号码为用户名");
+		}
+		return API.ok(userManager);
+	}
+
 }

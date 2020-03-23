@@ -1,5 +1,6 @@
 package com.education.resources.service.notifaction;
 
+import com.alibaba.druid.util.StringUtils;
 import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.OapiRobotSendRequest;
@@ -23,11 +24,13 @@ public class DingMsgService {
             OapiRobotSendRequest.Text text = new OapiRobotSendRequest.Text();
             text.setContent(dingding.getKeyWord() + "    " + dingding.getContent());
             request.setText(text);
-            OapiRobotSendRequest.At at = new OapiRobotSendRequest.At();
             String mobiles = dingding.getMobiles();
-            String[] split = mobiles.split(",");//以逗号分割
-            at.setAtMobiles(Arrays.asList(split));
-            request.setAt(at);
+            if (!StringUtils.isEmpty(mobiles)){
+                OapiRobotSendRequest.At at = new OapiRobotSendRequest.At();
+                String[] split = mobiles.split(",");//以逗号分割
+                at.setAtMobiles(Arrays.asList(split));
+                request.setAt(at);
+            }
         } else if (dingding.getDingType() == DingMsgForm.DingType.LINK) {
             request.setMsgtype("link");
             OapiRobotSendRequest.Link link = new OapiRobotSendRequest.Link();
@@ -38,11 +41,12 @@ public class DingMsgService {
             request.setLink(link);
 
         } else if (dingding.getDingType() == DingMsgForm.DingType.MARKDOWN) {
-            request.setMsgtype("markdown");
-            OapiRobotSendRequest.Markdown markdown = new OapiRobotSendRequest.Markdown();
-            markdown.setTitle(dingding.getKeyWord() + "    " + dingding.getTitle());
-            markdown.setText(dingding.getText());
-            request.setMarkdown(markdown);
+                request.setMsgtype("markdown");
+                OapiRobotSendRequest.Markdown markdown = new OapiRobotSendRequest.Markdown();
+                markdown.setTitle(dingding.getKeyWord() + "    " + dingding.getTitle());
+                markdown.setText(dingding.getText());
+                request.setMarkdown(markdown);
+
         } else if (dingding.getDingType() == DingMsgForm.DingType.ACTIONCARD) {
             request.setMsgtype("actionCard");
             OapiRobotSendRequest.Actioncard actioncard = new OapiRobotSendRequest.Actioncard();
