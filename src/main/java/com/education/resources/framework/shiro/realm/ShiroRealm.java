@@ -2,6 +2,7 @@ package com.education.resources.framework.shiro.realm;
 
 
 import com.education.resources.bean.auth.ManagerLoginLog;
+import com.education.resources.bean.entity.user.User;
 import com.education.resources.bean.vo.UserLoginVo;
 import com.education.resources.config.auth.ManagerRealm;
 import com.education.resources.framework.redis.RedisCache;
@@ -56,11 +57,11 @@ public class ShiroRealm extends ManagerRealm {
 
         if (authenticationToken instanceof JwtToken){
             JwtToken token = (JwtToken) authenticationToken;
-//            UserLoginVo user = userService.getCurrentUser();
-//            if (user == null) {
-//                APIError.NEED_LOGIN();
-//            }
-//            return new SimpleAuthenticationInfo(user, user.getToken(), this.getName());
+            User user = userService.getCurrentUser();
+            if (user == null) {
+                APIError.NEED_LOGIN();
+            }
+            return new SimpleAuthenticationInfo(user, token, this.getName());
         }
         return super.doGetAuthenticationInfo(authenticationToken);
     }

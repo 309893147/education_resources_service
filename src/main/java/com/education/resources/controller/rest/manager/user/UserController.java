@@ -2,6 +2,7 @@ package com.education.resources.controller.rest.manager.user;
 
 
 import com.education.resources.annotation.PermissionDes;
+import com.education.resources.bean.entity.ManagerApply;
 import com.education.resources.bean.entity.meta.MetaData;
 import com.education.resources.bean.entity.user.User;
 import com.education.resources.bean.from.PageForm;
@@ -41,6 +42,8 @@ public class UserController {
     public API<User> getOne(Integer id) {
         return API.ok(userService.getOne(id));
     }
+
+
 
 
 }

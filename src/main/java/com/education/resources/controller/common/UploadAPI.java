@@ -1,5 +1,6 @@
 package com.education.resources.controller.common;
 
+import com.education.resources.annotation.AnonUrl;
 import com.education.resources.config.oss.MinioConfig;
 import com.education.resources.service.oss.OssService;
 import com.education.resources.util.rest.API;
@@ -25,26 +26,7 @@ public class UploadAPI {
     private OssService<MinioConfig, MinioClient> minioOssService;
 
 
-//    @PostMapping("/business")
-//    @ApiOperation(value = "上传业务文件", notes = "获取上传路径")
-//    public API<RenheFile> uploadBusinessFile(MultipartFile file){
-//        String fileSaveName = getFileName("business", file);
-//        RenheFile  renheFile = new RenheFile();
-//        minioOssService.uploadFile(fileSaveName,file);
-//        renheFile.setName(file.getOriginalFilename());
-//        renheFile.setMime(file.getContentType());
-//        renheFile.setPath(fileSaveName);
-//        //返回文件访问路径
-//        return API.ok(filesService.saveFiles(renheFile));
-//    }
-
-
-//    @ApiOperation("/test")
-//    @GetMapping("/test")
-//    public API<HouseDocument>  getDocument(){
-//        return API.ok(filesService.getFiles("LiveHouse/Document",1,HouseDocument.class));
-//    }
-
+    @AnonUrl
     @PostMapping
     public API<String> uploadFile(MultipartFile file){
 

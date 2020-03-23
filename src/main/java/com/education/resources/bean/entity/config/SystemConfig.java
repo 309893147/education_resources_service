@@ -13,4 +13,7 @@ public class SystemConfig {
     @ConfigDes(title = "域名",defaultValue = "refactor.renhe.demo.cq1080.com",require = true,description = "如cq1080.com")
     private ConfigProperty  domain;
 
+    @ConfigDes(title = "工作提醒时间",defaultValue = "9:30",require = true,description = "每天工作提醒待处理业务")
+    private ConfigProperty remindTime;
+
 }

@@ -1,11 +1,16 @@
 package com.education.resources.service.auth;
 
 import com.education.resources.bean.auth.*;
+import com.education.resources.bean.entity.BaseEntity;
+import com.education.resources.bean.entity.ManagerApply;
 import com.education.resources.bean.entity.user.User;
+import com.education.resources.bean.from.ApplyManagerFrom;
 import com.education.resources.bean.from.PageForm;
+import com.education.resources.datasource.repository.ManagerApplyRepository;
 import com.education.resources.datasource.repository.UserRepository;
 import com.education.resources.datasource.repository.auth.ManagerLoginLogRepository;
 import com.education.resources.datasource.repository.auth.ManagerRepository;
+import com.education.resources.service.BaseService;
 import com.education.resources.util.RedisUtil;
 import com.education.resources.util.StringUtil;
 import com.education.resources.util.TokenUtil;
@@ -29,13 +34,16 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class AuthManagerService {
+public class AuthManagerService extends BaseService {
 
     private RedisTemplate<String, ManagerLoginLog> mUserRedisTemplate;
 
     private PermissionService permissionService;
 
     private ManagerRepository managerRepository;
+
+    @Autowired
+    ManagerApplyRepository managerApplyRepository;
 
     private ManagerLoginLogRepository loginLogRepository;
 
@@ -64,28 +72,55 @@ public class AuthManagerService {
 
     /**
      * 管理员登录
+     *
      * @param loginForm
      * @return
      */
+//    public ManagerLoginVO login(LoginForm loginForm) {
+//        Manager manager = managerRepository.findOne(Specifications.<Manager>and().eq("mobile", loginForm.getMobile()).eq("password", getPassword(loginForm.getPassword())).build()).orElse(null);
+//        if (manager == null) {
+//            APIError.e("账号或密码错误");
+//        }
+//        ManagerLoginLog loginLog = loginLogRepository.findOne(Specifications.<ManagerLoginLog>and().eq("managerId", manager.getId()).eq("status",ManagerLoginLog.Status.ACTIVE).build()).orElse(null);
+//        if (loginLog != null) {
+//            loginLog.setStatus(ManagerLoginLog.Status.EXPIRED);
+//            loginLogRepository.save(loginLog);
+//            mUserRedisTemplate.delete(  "manager_" + loginLog.getToken());
+//        }
+//        loginLog = new ManagerLoginLog();
+//        loginLog.setToken(TokenUtil.generateToken());
+//        loginLog.setManagerId(manager.getId());
+//        loginLog.setIp(getIP());
+//        loginLogRepository.save(loginLog);
+//        //save login token
+//        String key = "manager_" + loginLog.getToken();
+//        mUserRedisTemplate.boundValueOps(key).set(loginLog,30, TimeUnit.MINUTES);
+//        ManagerToken jwtToken = new ManagerToken(loginLog.getToken());
+//        SecurityUtils.getSubject().login(jwtToken);
+//        return ManagerLoginVO.builder().token(loginLog.getToken()).permissions(permissionService.getPermissionByUser(manager.getId())).info(manager).build();
+//    }
     public ManagerLoginVO login(LoginForm loginForm) {
         Manager manager = managerRepository.findOne(Specifications.<Manager>and().eq("mobile", loginForm.getMobile()).eq("password", getPassword(loginForm.getPassword())).build()).orElse(null);
         if (manager == null) {
             APIError.e("账号或密码错误");
         }
-        ManagerLoginLog loginLog = loginLogRepository.findOne(Specifications.<ManagerLoginLog>and().eq("managerId", manager.getId()).eq("status",ManagerLoginLog.Status.ACTIVE).build()).orElse(null);
+        ManagerLoginLog loginLog = loginLogRepository.findOne(Specifications.<ManagerLoginLog>and().eq("managerId", manager.getId()).eq("status", ManagerLoginLog.Status.ACTIVE).build()).orElse(null);
         if (loginLog != null) {
             loginLog.setStatus(ManagerLoginLog.Status.EXPIRED);
             loginLogRepository.save(loginLog);
-            mUserRedisTemplate.delete(  "manager_" + loginLog.getToken());
+            mUserRedisTemplate.delete("manager_" + loginLog.getToken());
         }
         loginLog = new ManagerLoginLog();
         loginLog.setToken(TokenUtil.generateToken());
         loginLog.setManagerId(manager.getId());
+        loginLog.setName(manager.getName());
         loginLog.setIp(getIP());
+
         loginLogRepository.save(loginLog);
         //save login token
         String key = "manager_" + loginLog.getToken();
-        mUserRedisTemplate.boundValueOps(key).set(loginLog,30, TimeUnit.MINUTES);
+//        mUserRedisTemplate.boundValueOps(key).set(loginLog,30, TimeUnit.MINUTES);
+        mUserRedisTemplate.boundValueOps(key).set(loginLog);
         ManagerToken jwtToken = new ManagerToken(loginLog.getToken());
         SecurityUtils.getSubject().login(jwtToken);
         return ManagerLoginVO.builder().token(loginLog.getToken()).permissions(permissionService.getPermissionByUser(manager.getId())).info(manager).build();
@@ -93,13 +128,15 @@ public class AuthManagerService {
 
     /**
      * 初始化超级管理员
+     *
      * @param form
      * @return
      */
-    private Manager  initManager(CreateManagerForm  form){
-        if (managerRepository.count(Specifications.<Manager>and().eq("type",Manager.Type.SUPER_MANAGER).build()) >0){
+    private Manager initManager(CreateManagerForm form) {
+        if (managerRepository.count(Specifications.<Manager>and().eq("type", Manager.Type.SUPER_MANAGER).build()) > 0) {
             APIError.e("超级管理员已存在");
-        };
+        }
+        ;
         Manager manager = new Manager();
         manager.setType(Manager.Type.SUPER_MANAGER);
         manager.setName(form.getName());
@@ -108,42 +145,38 @@ public class AuthManagerService {
         return managerRepository.save(manager);
     }
 
-    public Manager createUserManager(Integer userId){
-        User user = userRepository.findItemById(userId);
-        if (user.getMobile()!=null){
-            Manager manager = new Manager();
-            manager.setType(Manager.Type.USER);
-            manager.setName(user.getNickName());
-            manager.setMobile(user.getMobile());
-            manager.setPassword("123456");
-            manager.setKtNumber(""+System.nanoTime());
-            return managerRepository.save(manager);
-        }
-        return  null;
+    public ManagerApply createUserManager(ApplyManagerFrom applyManagerFrom) {
+        ManagerApply managerApply = new ManagerApply();
+        managerApply.setUserId(getCurrentUser().getId());
+        managerApply.setReason(applyManagerFrom.getReason());
+        managerApply.setMobile(applyManagerFrom.getMobile());
+        managerApply.setPassword(applyManagerFrom.getPassword());
+        return managerApplyRepository.save(managerApply);
     }
 
     /**
      * 创建或者编辑管理员
+     *
      * @param form
      * @param init
      * @return
      */
-    public Manager  createManager(CreateManagerForm form,boolean  init){
-        if (init){
+    public Manager createManager(CreateManagerForm form, boolean init) {
+        if (init) {
             return initManager(form);
         }
-        if(form.getId() == null && managerRepository.count(Specifications.<Manager>and().eq("mobile",form.getMobile()).build())>0){
+        if (form.getId() == null && managerRepository.count(Specifications.<Manager>and().eq("mobile", form.getMobile()).build()) > 0) {
             APIError.e("该登录账号已被注册");
         }
         Manager manager = new Manager();
-        if (form.getId() != null){
+        if (form.getId() != null) {
             manager = managerRepository.findItemById(form.getId());
         }
-        if (!form.getMobile().equals(manager.getMobile()) && managerRepository.count(Specifications.<Manager>and().eq("mobile",form.getMobile()).build())>0){
+        if (!form.getMobile().equals(manager.getMobile()) && managerRepository.count(Specifications.<Manager>and().eq("mobile", form.getMobile()).build()) > 0) {
             APIError.e("该登录账号已被注册");
         }
         manager.setMobile(form.getMobile());
-        if (manager.getPassword() == null){
+        if (manager.getPassword() == null) {
             manager.setPassword(getPassword(form.getPassword()));
         }
         manager.setRoles(form.getRoles());
@@ -152,24 +185,54 @@ public class AuthManagerService {
         return managerRepository.save(manager);
     }
 
-    private String  getPassword(String password){
-        return  DigestUtils.md5DigestAsHex(password.getBytes());
+    public Manager createUserManager(CreateManagerForm form, boolean init) {
+        if (init) {
+            return initManager(form);
+        }
+        if (form.getId() == null && managerRepository.count(Specifications.<Manager>and().eq("mobile", form.getMobile()).build()) > 0) {
+            APIError.e("该登录账号已被注册");
+        }
+        Manager manager = new Manager();
+        if (form.getId() != null) {
+            manager = managerRepository.findItemById(form.getId());
+        }
+        if (!form.getMobile().equals(manager.getMobile()) && managerRepository.count(Specifications.<Manager>and().eq("mobile", form.getMobile()).build()) > 0) {
+            APIError.e("该登录账号已被注册");
+        }
+        manager.setMobile(form.getMobile());
+        if (manager.getPassword() == null) {
+            manager.setPassword(getPassword(form.getPassword()));
+        }
+        manager.setRoles(form.getRoles());
+        manager.setType(Manager.Type.USER);
+        manager.setName(form.getName());
+        return managerRepository.save(manager);
+    }
+
+    private String getPassword(String password) {
+        return DigestUtils.md5DigestAsHex(password.getBytes());
     }
 
     /**
      * 获取管理员列表
+     *
      * @param manager
      * @param pageForm
      * @return
      */
     public Page<Manager> getManager(Manager manager, PageForm pageForm) {
-        PredicateBuilder<Manager> spec = SpecificationUtil.filter(manager,pageForm);
-        spec.eq("type",Manager.Type.MANAGER);
-        return managerRepository.findAll(spec.build(),pageForm.pageRequest());
+        PredicateBuilder<Manager> spec = SpecificationUtil.filter(manager, pageForm);
+        return managerRepository.findAll(spec.build(), pageForm.pageRequest());
+    }
+
+    public Page<ManagerApply> getManagerApply(ManagerApply managerApply,PageForm pageForm){
+        PredicateBuilder<ManagerApply> spec = SpecificationUtil.filter(managerApply, pageForm);
+        return managerApplyRepository.findAll(spec.build(), pageForm.pageRequest());
     }
 
     /**
      * 更改登录密码
+     *
      * @param loginForm
      */
     public void changePassword(PasswordForm loginForm) {
@@ -181,18 +244,19 @@ public class AuthManagerService {
 
     /**
      * 获取当前登录管理员
+     *
      * @return
      */
-    public Manager  getCurrentManager(){
+    public Manager getCurrentManager() {
         ManagerLoginLog loginLog = getCurrentUserLogin(true).get();
         return managerRepository.findItemById(loginLog.getManagerId());
     }
 
 
-    public Optional<ManagerLoginLog> getCurrentUserLogin(boolean throwError){
+    public Optional<ManagerLoginLog> getCurrentUserLogin(boolean throwError) {
         Subject subject = SecurityUtils.getSubject();
-        if(!subject.isAuthenticated()){
-            if (throwError){
+        if (!subject.isAuthenticated()) {
+            if (throwError) {
                 APIError.NEED_LOGIN();
             }
             return Optional.empty();
@@ -207,7 +271,7 @@ public class AuthManagerService {
         return servletRequest;
     }
 
-    private String  getIP(){
+    private String getIP() {
         HttpServletRequest request = getCurrentRequest();
         String ip = request.getHeader("X-Real-IP");
         if (ip != null && !ip.isEmpty()) {
@@ -218,19 +282,21 @@ public class AuthManagerService {
 
     /**
      * 删除管理员
+     *
      * @param ids
      */
     public void deleteManager(String ids) {
-        managerRepository.deleteInBatch(StringUtil.toDeleteBatch(ids,Manager.class));
+        managerRepository.deleteInBatch(StringUtil.toDeleteBatch(ids, Manager.class));
     }
 
     /**
      * 从缓存获取当前登录用户
+     *
      * @param token
      * @return
      */
     public ManagerLoginLog getManagerLoginLog(String token) {
-        String key ="manager_"+token;
+        String key = "manager_" + token;
         return mUserRedisTemplate.boundValueOps(key).get();
     }
 }

@@ -4,6 +4,7 @@ import com.education.resources.bean.entity.Ticket;
 import com.education.resources.bean.entity.config.DingConfig;
 import com.education.resources.bean.entity.config.SystemConfig;
 import com.education.resources.bean.from.PageForm;
+import com.education.resources.bean.pojo.event.DingMessageEvent;
 import com.education.resources.datasource.repository.TicketRepository;
 import com.education.resources.service.config.ConfigService;
 import com.education.resources.util.jpa.SpecificationUtil;
@@ -41,9 +42,7 @@ public class TicketService extends BaseService {
         Integer id = getCurrentUser().getId();
         ticket.setUserId(id);
         ticket.setStatus(Ticket.Status.CREATED);
-        DingConfig config = getConfig(DingConfig.class);
-        //TODO
-        config.getWebhook();
+        sendEvent(DingMessageEvent.builder().content(ticket.getUser().getNickName()+"发起了资源求助："+ticket.getContent()).build());
         return ticketRepository.save(ticket);
 
     }

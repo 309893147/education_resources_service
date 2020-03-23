@@ -16,11 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "钉钉")
 public class DingMsgController {
 
-
-
    DingMsgService dingMsgService=new DingMsgService();
-//    @Autowired
-//    DingMsgService dingMsgService;
 
     @ApiOperation(value = "发送钉钉消息", notes = "")
     @PostMapping("/sendDingMsg")

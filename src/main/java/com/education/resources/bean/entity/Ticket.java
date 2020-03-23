@@ -4,6 +4,7 @@ package com.education.resources.bean.entity;
 
 import com.education.resources.annotation.Meta;
 import com.education.resources.bean.auth.Manager;
+import com.education.resources.bean.entity.user.User;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import javax.persistence.*;
@@ -18,6 +19,12 @@ public class Ticket extends BaseEntity {
     private Integer  userId;
 
     private Integer managerId;
+
+    @OneToOne
+    @JoinColumn(name = "userId", insertable = false, updatable = false)
+    @Meta(displayInList = true)
+    @ApiModelProperty(value = "发起人")
+    private User user;
 
     @OneToOne
     @JoinColumn(name = "managerId", insertable = false, updatable = false)
@@ -44,6 +51,7 @@ public class Ticket extends BaseEntity {
     private Timestamp finishTime;
 
     private String path;
+
 
     /**
      * 状态

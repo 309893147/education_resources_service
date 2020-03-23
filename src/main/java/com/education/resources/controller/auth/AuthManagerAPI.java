@@ -3,6 +3,7 @@ package com.education.resources.controller.auth;
 import com.education.resources.annotation.AnonUrl;
 import com.education.resources.annotation.PermissionDes;
 import com.education.resources.bean.auth.*;
+import com.education.resources.bean.entity.ManagerApply;
 import com.education.resources.bean.entity.meta.MetaData;
 import com.education.resources.bean.from.PageForm;
 import com.education.resources.service.auth.AuthManagerService;
@@ -63,31 +64,47 @@ public class AuthManagerAPI {
         return API.ok();
     }
 
-    @ApiOperation("创建用户后台账号")
-    @PostMapping(value = "/user")
-    public API<Manager>  createUserManager(Integer userId){
-        Manager userManager = userManagerService.createUserManager(userId);
-        if (userManager==null) {
-            return API.e("请完善个人资料电话号码,后台账号将根据电话号码为用户名");
-        }
-        return API.ok(userManager);
-    }
+//    @ApiOperation("创建用户后台账号")
+//    @PostMapping(value = "/user")
+//    public API<Manager>  createUserManager(Integer userId){
+//        Manager userManager = userManagerService.createUserManager(userId);
+//        if (userManager==null) {
+//            return API.e("请完善个人资料电话号码,后台账号将根据电话号码为用户名");
+//        }
+//        return API.ok(userManager);
+//    }
 
 
     @ApiOperation("创建管理员")
-    @PostMapping()
-    @PermissionDes(menu = {"系统设置","设置管理员"},rewriteMenu = true,name = "创建管理员")
+    @PostMapping
+    @PermissionDes(menu = {"设置管理员"},rewriteMenu = true,name = "创建管理员")
     public API<Manager>  createManager(@RequestBody @Valid CreateManagerForm createManagerForm){
         return API.ok(userManagerService.createManager(createManagerForm,false));
     }
 
+    @ApiOperation("创建管理员")
+    @PostMapping(value = "/user")
+    @PermissionDes(menu = {"设置用户管理员"},rewriteMenu = true,name = "创建用户管理员")
+    public API<Manager>  createUserManager(@RequestBody @Valid CreateManagerForm createManagerForm){
+        return API.ok(userManagerService.createUserManager(createManagerForm,false));
+    }
+
+
+
     @ApiOperation("获取管理员列表")
-    @GetMapping()
+    @GetMapping
     @PermissionDes(menu = {"系统设置","设置管理员"},rewriteMenu = true,name = "管理员列表")
     public API<Page<Manager>>  getManager(Manager manager, PageForm pageForm){
         return API.ok(userManagerService.getManager(manager,pageForm));
     }
 
+
+    @GetMapping(value = "apply")
+    @ApiOperation(value = "用户列表")
+    @PermissionDes(menu = {"用户列表"}, name = "显示")
+    public API<Page<ManagerApply>> getManagerApply(ManagerApply managerApply, PageForm pageForm) {
+        return API.ok(userManagerService.getManagerApply(managerApply, pageForm));
+    }
 
     @ApiOperation("删除管理员")
     @DeleteMapping()
@@ -97,6 +114,11 @@ public class AuthManagerAPI {
         return API.ok();
     }
 
+    @ApiOperation("获取管理员meta信息")
+    @GetMapping("/apply/meta")
+    public API<MetaData> getManagerApplyMeta(){
+        return API.ok(MetaUtils.getMeta(ManagerApply.class));
+    }
 
     @ApiOperation("获取管理员meta信息")
     @GetMapping("/meta")
@@ -104,6 +126,7 @@ public class AuthManagerAPI {
         return API.ok(MetaUtils.getMeta(Manager.class));
     }
 
+    @AnonUrl
     @ApiOperation("获取当前登录用户的权限")
     @GetMapping("/permission")
     public API<List<Permission>> getUserPermission(){

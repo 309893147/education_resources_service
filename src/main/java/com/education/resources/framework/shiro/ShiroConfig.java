@@ -4,6 +4,7 @@ package com.education.resources.framework.shiro;
 import com.education.resources.filter.ManagerTokenFilter;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.apache.shiro.mgt.SecurityManager;
@@ -29,15 +30,24 @@ public class ShiroConfig {
         factoryBean.setSecurityManager(securityManager);
 
         Map<String, String> filterRuleMap = new HashMap<>();
-        filterRuleMap.put("/api/**", "anon");
-//        filterRuleMap.put("/manage/**", "token");
-        filterRuleMap.put("/manage/**", "anon");
+        filterRuleMap.put("/api/**", "apiToken");
+        filterRuleMap.put("/manage/**", "token");
+//        filterRuleMap.put("/manage/**", "anon");
         filterRuleMap.put("/api/user/login","anon");
         filterRuleMap.put("/unauthorized/**", "anon");
         filterRuleMap.put("/**", "anon");
         factoryBean.setFilterChainDefinitionMap(filterRuleMap);
         return factoryBean;
     }
+
+    @Bean
+    public MethodInvokingFactoryBean methodInvokingFactoryBean(SecurityManager securityManager) {
+        MethodInvokingFactoryBean bean = new MethodInvokingFactoryBean();
+        bean.setStaticMethod("org.apache.shiro.SecurityUtils.setSecurityManager");
+        bean.setArguments(securityManager);
+        return bean;
+    }
+
     @Bean
     public DefaultAdvisorAutoProxyCreator getDefaultAdvisorAutoProxyCreator(){
         DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator=new DefaultAdvisorAutoProxyCreator();

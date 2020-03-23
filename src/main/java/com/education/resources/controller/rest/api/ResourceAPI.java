@@ -38,7 +38,7 @@ public class ResourceAPI {
     }
 
     @GetMapping(value = "detail")
-    @ApiOperation(value = "教育资源列表")
+    @ApiOperation(value = "教育资源详情")
     public API<Resource> getOne(Integer id){
         return API.ok(resouceService.getOne(id));
     }
