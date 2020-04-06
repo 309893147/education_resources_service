@@ -10,8 +10,8 @@ import com.education.resources.service.auth.AuthManagerService;
 import com.education.resources.service.auth.PermissionService;
 import com.education.resources.util.MetaUtils;
 import com.education.resources.util.rest.API;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+//import io.swagger.annotations.Api;
+//import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/manage/manager")
-@Api(tags = "管理员")
+//@Api(tags = "管理员")
 @PermissionDes(menu = "用户管理")
 public class AuthManagerAPI {
 
@@ -43,7 +43,7 @@ public class AuthManagerAPI {
 
     @AnonUrl
     @PostMapping("/login")
-    @ApiOperation("管理员登录")
+//    @ApiOperation("管理员登录")
     public API<ManagerLoginVO> login(@RequestBody @Valid LoginForm loginForm){
 
         return API.ok(userManagerService.login(loginForm));
@@ -51,14 +51,14 @@ public class AuthManagerAPI {
 
     @AnonUrl
     @PostMapping("/init")
-    @ApiOperation("初始化超级管理员")
+//    @ApiOperation("初始化超级管理员")
     public API firstRegister(@RequestBody @Valid CreateManagerForm loginForm){
         userManagerService.createManager(loginForm,true);
         return API.ok();
     }
 
     @PostMapping("/pass")
-    @ApiOperation("修改登录密码")
+//    @ApiOperation("修改登录密码")
     public API<ManagerLoginVO>  changeManagerPassword(@RequestBody @Valid PasswordForm loginForm){
         userManagerService.changePassword(loginForm);
         return API.ok();
@@ -75,14 +75,14 @@ public class AuthManagerAPI {
 //    }
 
 
-    @ApiOperation("创建管理员")
+//    @ApiOperation("创建管理员")
     @PostMapping
     @PermissionDes(menu = {"设置管理员"},rewriteMenu = true,name = "创建管理员")
     public API<Manager>  createManager(@RequestBody @Valid CreateManagerForm createManagerForm){
         return API.ok(userManagerService.createManager(createManagerForm,false));
     }
 
-    @ApiOperation("创建管理员")
+//    @ApiOperation("创建管理员")
     @PostMapping(value = "/user")
     @PermissionDes(menu = {"设置用户管理员"},rewriteMenu = true,name = "创建用户管理员")
     public API<Manager>  createUserManager(@RequestBody @Valid CreateManagerForm createManagerForm){
@@ -91,7 +91,7 @@ public class AuthManagerAPI {
 
 
 
-    @ApiOperation("获取管理员列表")
+//    @ApiOperation("获取管理员列表")
     @GetMapping
     @PermissionDes(menu = {"系统设置","设置管理员"},rewriteMenu = true,name = "管理员列表")
     public API<Page<Manager>>  getManager(Manager manager, PageForm pageForm){
@@ -100,13 +100,13 @@ public class AuthManagerAPI {
 
 
     @GetMapping(value = "apply")
-    @ApiOperation(value = "用户列表")
+//    @ApiOperation(value = "用户列表")
     @PermissionDes(menu = {"用户列表"}, name = "显示")
     public API<Page<ManagerApply>> getManagerApply(ManagerApply managerApply, PageForm pageForm) {
         return API.ok(userManagerService.getManagerApply(managerApply, pageForm));
     }
 
-    @ApiOperation("删除管理员")
+//    @ApiOperation("删除管理员")
     @DeleteMapping()
     @PermissionDes(menu = {"系统设置","设置管理员"},rewriteMenu = true,name = "删除管理员")
     public API  deleteManager(@RequestParam String ids){
@@ -114,20 +114,20 @@ public class AuthManagerAPI {
         return API.ok();
     }
 
-    @ApiOperation("获取管理员meta信息")
+//    @ApiOperation("获取管理员meta信息")
     @GetMapping("/apply/meta")
     public API<MetaData> getManagerApplyMeta(){
         return API.ok(MetaUtils.getMeta(ManagerApply.class));
     }
 
-    @ApiOperation("获取管理员meta信息")
+//    @ApiOperation("获取管理员meta信息")
     @GetMapping("/meta")
     public API<MetaData> getManagerMeta(){
         return API.ok(MetaUtils.getMeta(Manager.class));
     }
 
     @AnonUrl
-    @ApiOperation("获取当前登录用户的权限")
+//    @ApiOperation("获取当前登录用户的权限")
     @GetMapping("/permission")
     public API<List<Permission>> getUserPermission(){
 

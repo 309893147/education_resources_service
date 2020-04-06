@@ -5,7 +5,7 @@ import com.education.resources.config.oss.MinioConfig;
 import com.education.resources.service.oss.OssService;
 import com.education.resources.util.rest.API;
 import io.minio.MinioClient;
-import io.swagger.annotations.Api;
+//import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @RestController
-@Api(tags = "文件上传接口")
+//@Api(tags = "文件上传接口")
 @RequestMapping("/api/upload")
 public class UploadAPI {
 

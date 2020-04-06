@@ -1,8 +1,5 @@
 package com.education.resources.service.notifaction;
 
-
-
-import com.alibaba.druid.util.StringUtils;
 import com.education.resources.bean.entity.Log;
 import com.education.resources.bean.entity.config.DingConfig;
 import com.education.resources.bean.entity.notice.Notice;
@@ -12,10 +9,11 @@ import com.education.resources.bean.pojo.event.DingMessageEvent;
 import com.education.resources.bean.pojo.event.LogEvent;
 import com.education.resources.datasource.repository.NoticeRepository;
 import com.education.resources.service.BaseService;
-import com.education.resources.service.config.ConfigService;
 import com.education.resources.util.StringUtil;
 import com.education.resources.util.jpa.SpecificationUtil;
 import com.github.wenhao.jpa.PredicateBuilder;
+import com.github.wenhao.jpa.Specifications;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
@@ -43,6 +41,15 @@ public class NoticeService extends BaseService {
         noticeRepository.softDelete(StringUtil.toIntArray(ids));
     }
 
+    public Notice  getOne(Integer id){
+        return noticeRepository.findItemById(id);
+    }
+
+
+    public Page<Notice> getApiNoticeList(PageForm pageForm) {
+        PredicateBuilder<Notice> spec = Specifications.<Notice>and().eq("presenceStatus", 1);
+        return noticeRepository.findAll(spec.build(), pageForm.pageRequest());
+    }
 
     /**
      * 发送钉钉消息
@@ -71,5 +78,9 @@ public class NoticeService extends BaseService {
         }
 
     }
+
+//    public void readNotice(Integer id) {
+//        noticeRepository.updateReadCount(id);
+//    }
 }
 

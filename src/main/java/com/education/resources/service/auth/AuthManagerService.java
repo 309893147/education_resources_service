@@ -76,29 +76,6 @@ public class AuthManagerService extends BaseService {
      * @param loginForm
      * @return
      */
-//    public ManagerLoginVO login(LoginForm loginForm) {
-//        Manager manager = managerRepository.findOne(Specifications.<Manager>and().eq("mobile", loginForm.getMobile()).eq("password", getPassword(loginForm.getPassword())).build()).orElse(null);
-//        if (manager == null) {
-//            APIError.e("账号或密码错误");
-//        }
-//        ManagerLoginLog loginLog = loginLogRepository.findOne(Specifications.<ManagerLoginLog>and().eq("managerId", manager.getId()).eq("status",ManagerLoginLog.Status.ACTIVE).build()).orElse(null);
-//        if (loginLog != null) {
-//            loginLog.setStatus(ManagerLoginLog.Status.EXPIRED);
-//            loginLogRepository.save(loginLog);
-//            mUserRedisTemplate.delete(  "manager_" + loginLog.getToken());
-//        }
-//        loginLog = new ManagerLoginLog();
-//        loginLog.setToken(TokenUtil.generateToken());
-//        loginLog.setManagerId(manager.getId());
-//        loginLog.setIp(getIP());
-//        loginLogRepository.save(loginLog);
-//        //save login token
-//        String key = "manager_" + loginLog.getToken();
-//        mUserRedisTemplate.boundValueOps(key).set(loginLog,30, TimeUnit.MINUTES);
-//        ManagerToken jwtToken = new ManagerToken(loginLog.getToken());
-//        SecurityUtils.getSubject().login(jwtToken);
-//        return ManagerLoginVO.builder().token(loginLog.getToken()).permissions(permissionService.getPermissionByUser(manager.getId())).info(manager).build();
-//    }
     public ManagerLoginVO login(LoginForm loginForm) {
         Manager manager = managerRepository.findOne(Specifications.<Manager>and().eq("mobile", loginForm.getMobile()).eq("password", getPassword(loginForm.getPassword())).build()).orElse(null);
         if (manager == null) {
@@ -115,11 +92,8 @@ public class AuthManagerService extends BaseService {
         loginLog.setManagerId(manager.getId());
         loginLog.setName(manager.getName());
         loginLog.setIp(getIP());
-
         loginLogRepository.save(loginLog);
-        //save login token
         String key = "manager_" + loginLog.getToken();
-//        mUserRedisTemplate.boundValueOps(key).set(loginLog,30, TimeUnit.MINUTES);
         mUserRedisTemplate.boundValueOps(key).set(loginLog);
         ManagerToken jwtToken = new ManagerToken(loginLog.getToken());
         SecurityUtils.getSubject().login(jwtToken);
@@ -271,7 +245,7 @@ public class AuthManagerService extends BaseService {
         return servletRequest;
     }
 
-    private String getIP() {
+    public String getIP() {
         HttpServletRequest request = getCurrentRequest();
         String ip = request.getHeader("X-Real-IP");
         if (ip != null && !ip.isEmpty()) {

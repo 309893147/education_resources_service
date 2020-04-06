@@ -1,16 +1,12 @@
 package com.education.resources.controller.common;
 
 import com.education.resources.annotation.AnonUrl;
-import com.education.resources.bean.entity.ResourceFile;
 import com.education.resources.config.oss.MinioConfig;
-import com.education.resources.service.ResourceFileService;
 import com.education.resources.service.oss.OssService;
 import com.education.resources.util.rest.API;
 import io.minio.MinioClient;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+//import io.swagger.annotations.Api;
+//import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @RestController
-@Api(tags = "文件上传接口")
+//@Api(tags = "文件上传接口")
 @RequestMapping("/manage/upload")
 public class UploadController {
 
@@ -30,33 +26,10 @@ public class UploadController {
     @Resource(name = "MinioOssService")
     private OssService<MinioConfig, MinioClient> minioOssService;
 
-    @Autowired
-    ResourceFileService filesService;
-
-
-    @AnonUrl
-    @PostMapping("/resource")
-    @ApiOperation(value = "上传教学资源文件", notes = "获取上传路径")
-    public API<ResourceFile> uploadResourceFile(MultipartFile file){
-        String fileSaveName = getFileName("resource", file);
-        ResourceFile renheFile = new ResourceFile();
-        minioOssService.uploadFile(fileSaveName,file);
-        renheFile.setName(file.getOriginalFilename());
-        renheFile.setMime(file.getContentType());
-        renheFile.setPath(fileSaveName);
-        //返回文件访问路径
-        return API.ok(filesService.saveFiles(renheFile));
-    }
-
-
-//    @ApiOperation("/test")
-//    @GetMapping("/test")
-//    public API<HouseDocument>  getDocument(){
-//        return API.ok(filesService.getFiles("LiveHouse/Document",1,HouseDocument.class));
-//    }
 
     @AnonUrl
     @PostMapping
+//    @ApiOperation(value = "上传教学资源文件", notes = "获取上传路径")
     public API<String> uploadFile(MultipartFile file){
 
         String fileName = getFileName("files", file);

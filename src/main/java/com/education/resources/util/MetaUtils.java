@@ -2,7 +2,7 @@ package com.education.resources.util;
 
 import com.education.resources.annotation.Meta;
 import com.education.resources.bean.entity.meta.MetaData;
-import io.swagger.annotations.ApiModelProperty;
+//import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.StringUtils;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -63,10 +63,10 @@ public class MetaUtils {
     public static MetaData getMetaFromField(int index, Field field) {
         MetaData.MetaDataBuilder fieldsBuilder = MetaData.builder();
         fieldsBuilder.key(field.getName());
-        if (field.isAnnotationPresent(ApiModelProperty.class)) {
-            ApiModelProperty property = field.getAnnotation(ApiModelProperty.class);
-            fieldsBuilder.name(property.value());
-        }
+//        if (field.isAnnotationPresent(ApiModelProperty.class)) {
+//            ApiModelProperty property = field.getAnnotation(ApiModelProperty.class);
+//            fieldsBuilder.name(property.value());
+//        }
         if (field.isAnnotationPresent(Meta.class)) {
             Meta meta = field.getAnnotation(Meta.class);
             if (!StringUtils.isEmpty(meta.displayName())) {
@@ -132,10 +132,10 @@ public class MetaUtils {
                 MetaData.SearchOption.SearchOptionBuilder optionBuilder = MetaData.SearchOption.builder();
                 Field enumField = type.getField(((Enum) object).name());
                 optionBuilder.key(object.toString());
-                if (enumField.isAnnotationPresent(ApiModelProperty.class)) {
-                    ApiModelProperty prop = enumField.getAnnotation(ApiModelProperty.class);
-                    optionBuilder.name(prop.value());
-                }
+//                if (enumField.isAnnotationPresent(ApiModelProperty.class)) {
+//                    ApiModelProperty prop = enumField.getAnnotation(ApiModelProperty.class);
+//                    optionBuilder.name(prop.value());
+//                }
                 options.add(optionBuilder.build());
             } catch (NoSuchFieldException e) {
                 e.printStackTrace();

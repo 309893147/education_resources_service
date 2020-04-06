@@ -32,7 +32,7 @@ public class BasicTypeService {
     }
 
     public  List<BasicType> typePage(BasicType basicType, PageForm pageForm){
-       return basicTypeRepository.findAll(Specifications.<BasicType>and().eq("type",basicType.getType()).build());
+       return basicTypeRepository.findAll(Specifications.<BasicType>and().eq("presenceStatus",1).build());
     }
 
     public BasicType getOne(Integer id) {

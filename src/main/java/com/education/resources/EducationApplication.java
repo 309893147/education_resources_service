@@ -8,6 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.RequestContextListener;
 
 @EntityScan(basePackages = "com.education.resources")
 @EnableJpaRepositories(basePackages = "com.education.resources")
@@ -23,5 +24,11 @@ public class EducationApplication {
     @Bean
     public RestTemplate restTemplate(){
         return  new RestTemplate();
+    }
+
+
+    @Bean
+    public RequestContextListener requestContextListener(){
+        return new RequestContextListener();
     }
 }

@@ -1,8 +1,8 @@
 package com.education.resources.bean.entity;
 
 import com.education.resources.bean.entity.user.User;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+//import io.swagger.annotations.ApiModel;
+//import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.annotations.Cascade;
 
@@ -10,13 +10,13 @@ import javax.persistence.*;
 import java.util.List;
 @Data
 @Entity
-@ApiModel(value = "ResourceComment",description = "资源评论表")
+//@ApiModel(value = "ResourceComment",description = "资源评论表")
 public class ResourceComment extends BaseEntity {
 
-    @ApiModelProperty(value = "评论内容")
+//    @ApiModelProperty(value = "评论内容")
     private String content;
 
-    @ApiModelProperty(value = "用户Id")
+//    @ApiModelProperty(value = "用户Id")
     private Integer userId;
 
 //    @ApiModelProperty(value = "分类图标")
@@ -25,7 +25,7 @@ public class ResourceComment extends BaseEntity {
 //    @ApiModelProperty(value = "评论父Id")
 //    private Integer parent;
 
-    @ApiModelProperty(value = "用户")
+//    @ApiModelProperty(value = "用户")
     @ManyToOne
     @JoinColumn(name = "userId",referencedColumnName = "id",insertable = false,updatable = false)
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
@@ -37,7 +37,7 @@ public class ResourceComment extends BaseEntity {
 //    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
 //    private List<ResourceComment> sub;
 
-    @ApiModelProperty(value = "资源id")
+//    @ApiModelProperty(value = "资源id")
     private Integer resourceId;
 
 //    @ApiModelProperty(value = "资源")

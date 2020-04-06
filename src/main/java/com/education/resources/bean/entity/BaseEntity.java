@@ -6,7 +6,7 @@ import com.education.resources.util.TimestampDeserializer;
 import com.education.resources.util.TimestampSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import io.swagger.annotations.ApiModelProperty;
+//import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -29,7 +29,7 @@ public class BaseEntity implements Serializable {
      */
     private static final long serialVersionUID = 4125096758372084309L;
 
-    @ApiModelProperty(accessMode = ApiModelProperty.AccessMode.READ_ONLY)
+//    @ApiModelProperty(accessMode = ApiModelProperty.AccessMode.READ_ONLY)
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(updatable = false,columnDefinition = "int(11) comment 'id自增'")
@@ -37,7 +37,7 @@ public class BaseEntity implements Serializable {
 
 
     @CreationTimestamp
-    @ApiModelProperty(dataType = "java.lang.String",example = "2019-05-22 18:00:00",accessMode = ApiModelProperty.AccessMode.READ_ONLY)
+//    @ApiModelProperty(dataType = "java.lang.String",example = "2019-05-22 18:00:00",accessMode = ApiModelProperty.AccessMode.READ_ONLY)
     @Column(updatable = false,columnDefinition = "datetime(0) comment '创建时间'")
     @JsonSerialize(using = TimestampSerializer.class)
     @JsonDeserialize(using = TimestampDeserializer.class)
@@ -46,14 +46,14 @@ public class BaseEntity implements Serializable {
 
 
     @UpdateTimestamp
-    @ApiModelProperty(dataType = "java.lang.String",example = "2019-05-22 18:00:00",accessMode = ApiModelProperty.AccessMode.READ_ONLY)
+//    @ApiModelProperty(dataType = "java.lang.String",example = "2019-05-22 18:00:00",accessMode = ApiModelProperty.AccessMode.READ_ONLY)
     @Column(columnDefinition = "datetime(0) comment '更新时间'")
     @Meta(displayName = "更新时间",type = ContentType.TIMESTAMP)
     @JsonSerialize(using = TimestampSerializer.class)
     @JsonDeserialize(using = TimestampDeserializer.class)
     private Timestamp updateTime;
 
-    @ApiModelProperty(value = "0-删除 1-新建")
+//    @ApiModelProperty(value = "0-删除 1-新建")
     @Column(insertable = false,columnDefinition = "int default 1")
     private Integer presenceStatus;
 

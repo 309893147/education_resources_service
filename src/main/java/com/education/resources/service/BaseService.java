@@ -90,4 +90,9 @@ public class BaseService  implements ApplicationContextAware {
     public void sendEvent(Object object){
         mContext.publishEvent(object);
     }
+
+    protected String getIP(){
+        return authManagerService.getIP();
+    }
+
 }

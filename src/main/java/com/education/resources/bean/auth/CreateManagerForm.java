@@ -1,6 +1,6 @@
 package com.education.resources.bean.auth;
 
-import io.swagger.annotations.ApiModelProperty;
+//import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.List;
@@ -10,16 +10,16 @@ public class CreateManagerForm {
 
     private Integer id;
 
-    @ApiModelProperty(name = "登录账号")
+//    @ApiModelProperty(name = "登录账号")
     private String mobile;
 
-    @ApiModelProperty(name = "账号名称")
+//    @ApiModelProperty(name = "账号名称")
     private String name;
 
-    @ApiModelProperty(name = "登录密码")
+//    @ApiModelProperty(name = "登录密码")
     private String password;
 
-    @ApiModelProperty(name = "用户角色")
+//    @ApiModelProperty(name = "用户角色")
     private List<Role> roles;
 
 }

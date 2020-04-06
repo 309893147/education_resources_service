@@ -3,30 +3,23 @@ package com.education.resources.controller.rest.api;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.alibaba.fastjson.JSONObject;
 import com.education.resources.annotation.AnonUrl;
-import com.education.resources.bean.auth.Manager;
 import com.education.resources.bean.entity.ManagerApply;
 import com.education.resources.bean.entity.user.User;
 import com.education.resources.bean.from.ApplyManagerFrom;
-import com.education.resources.bean.vo.UserLoginVo;
 import com.education.resources.service.UserService;
 import com.education.resources.service.auth.AuthManagerService;
 import com.education.resources.util.HttpClientUtil;
 import com.education.resources.util.rest.API;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+//import io.swagger.annotations.Api;
+//import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import com.alibaba.druid.support.json.JSONUtils;
-import com.alibaba.fastjson.JSONObject;
 
 @RequestMapping("/api")
 @RestController
-@Api(tags = "反馈相关接口")
+//@Api(tags = "反馈相关接口")
 public class WXUserAPI {
 	@Autowired
 	UserService userService;
@@ -61,17 +54,19 @@ public class WXUserAPI {
 		return API.ok(userService.addWXUser(user));
 	}
 
+	@AnonUrl
 	@PostMapping("/updateUser")
 	public API<User> updateUser(User user) {
 		return API.ok(userService.updateUser(user));
 	}
 
+	@AnonUrl
 	@GetMapping("/getUser")
 	public API<User> findById(Integer id){
 		return API.ok(userService.getOne(id));
 	}
 
-	@ApiOperation("用户申请后台账号")
+//	@ApiOperation("用户申请后台账号")
 	@PostMapping(value = "/user/manager")
 	public API<ManagerApply>  userApplyManager(@RequestBody ApplyManagerFrom applyManagerFrom){
 		ManagerApply userManager = userManagerService.createUserManager(applyManagerFrom);

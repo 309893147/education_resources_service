@@ -3,7 +3,7 @@ package com.education.resources.bean.entity;
 import com.education.resources.annotation.DeleteType;
 import com.education.resources.annotation.EditType;
 import com.education.resources.annotation.Meta;
-import io.swagger.annotations.ApiModelProperty;
+//import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -33,7 +33,7 @@ public class Log extends BaseEntity {
     private String  ip;
 
 
-    private Integer  userId;
+    private Integer  managerId;
 
 
 
@@ -42,21 +42,21 @@ public class Log extends BaseEntity {
     private Type  type = Type.SYSTEM;
 
     public   enum   Type{
-        @ApiModelProperty("系统")
+//        @ApiModelProperty("系统")
         SYSTEM,
-        @ApiModelProperty("操作")
+//        @ApiModelProperty("操作")
         OPERATION
     }
 
 
     public enum Level{
-        @ApiModelProperty("信息")
+//        @ApiModelProperty("信息")
         INFO,
 
-        @ApiModelProperty("警告")
+//        @ApiModelProperty("警告")
         WARNING,
 
-        @ApiModelProperty("错误")
+//        @ApiModelProperty("错误")
         ERROR
     }
 }

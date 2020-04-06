@@ -39,9 +39,18 @@ public class UserService extends BaseService {
     }
 
     public User updateUser(User user) {
-        user.setPresenceStatus(1);
-        return userRepository.saveAndFlush(user);
-    }
+        User item = userRepository.findItemById(user.getId());
+        item.setPresenceStatus(1);
+        item.setAvatarUrl(user.getAvatarUrl());
+        item.setNickName(user.getNickName());
+        item.setAge(user.getAge());
+        item.setGrade(user.getGrade());
+        item.setGender(user.getGender());
+        item.setMobile(user.getMobile());
+        item.setEmail(user.getEmail());
+        item.setId(user.getId());
+        return userRepository.saveAndFlush(item);
+}
 
     public Page<User> getUserList(User user, PageForm pageForm) {
         PredicateBuilder<User> spec = SpecificationUtil.filter(user);

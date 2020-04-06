@@ -21,7 +21,7 @@ public class AlsRecallTrain implements Serializable {
 
         SparkSession spark = SparkSession.builder().master("local").appName("DianpingApp").getOrCreate();
 
-        JavaRDD<String> csvFile = spark.read().textFile("D:\\behavior.csv").toJavaRDD();
+        JavaRDD<String> csvFile = spark.read().textFile("D:\\BaiduNetdiskDownload\\devtool\\devtool\\data\\behavior.csv").toJavaRDD();
 
         JavaRDD<Rating> ratingJavaRDD = csvFile.map(new Function<String, Rating>() {
             @Override
@@ -56,7 +56,7 @@ public class AlsRecallTrain implements Serializable {
         System.out.println("rmse=" + rmse);
 
         try {
-            alsModel.save("C:\\Users\\fz\\recommend\\alsModel");
+            alsModel.save("D:\\spark\\recommend\\alsModel");
         } catch (IOException e) {
             e.printStackTrace();
         }

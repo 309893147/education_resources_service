@@ -59,9 +59,6 @@ public class SpecificationUtil {
             }
         });
         if (pageForm != null){
-//            Timestamp startTime = new Timestamp(pageForm.getStartTime()==null?0:pageForm.getStartTime());
-//            Timestamp endTime = new Timestamp(pageForm.getEndTime()==null? System.currentTimeMillis():pageForm.getEndTime());
-//            spec.between("createTime",startTime,endTime);
             if(!StringUtils.isEmpty(pageForm.getTimes())){
                 try {
                     parseTimestampList(pageForm.getTimes()).forEach(item -> {
@@ -71,7 +68,6 @@ public class SpecificationUtil {
                     e.printStackTrace();
                     APIError.e(400,"格式错误！正确格式为：name,start,end;name,start,end");
                 }
-
             }
         }
         return spec;

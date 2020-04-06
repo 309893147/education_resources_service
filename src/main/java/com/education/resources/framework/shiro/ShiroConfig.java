@@ -30,7 +30,7 @@ public class ShiroConfig {
         factoryBean.setSecurityManager(securityManager);
 
         Map<String, String> filterRuleMap = new HashMap<>();
-        filterRuleMap.put("/api/**", "apiToken");
+        filterRuleMap.put("/api/**", "anon");
         filterRuleMap.put("/manage/**", "token");
 //        filterRuleMap.put("/manage/**", "anon");
         filterRuleMap.put("/api/user/login","anon");

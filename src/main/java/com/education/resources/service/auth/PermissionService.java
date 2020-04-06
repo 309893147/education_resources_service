@@ -125,8 +125,6 @@ public class PermissionService{
             checkMyPermission(menuList,permissions,false);
             return menuList;
         }
-
-
         return menuList;
     }
 

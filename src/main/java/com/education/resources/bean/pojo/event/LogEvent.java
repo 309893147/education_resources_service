@@ -14,13 +14,9 @@ public class LogEvent {
 
     private String ip;
 
-    private Integer communityId;
+    private String name;
 
-    private String userName;
-
-    private Integer  employeeId;
-
-    private Integer  userId;
+    private Integer  managerId;
 
     //操作
     private String operation;

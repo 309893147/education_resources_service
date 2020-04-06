@@ -27,18 +27,21 @@ public class BannerService extends BaseService {
 
     public List<Banner> bannerList() {
         PredicateBuilder<Banner> spec = Specifications.<Banner>and();
-        spec.eq("presenceStatus",1);
-        spec.eq("joinUse",true);
+        spec.eq("presenceStatus", 1);
+        spec.eq("joinUse", true);
         return bannerRepository.findAll(spec.build());
     }
 
-
-
-  public Banner  saveBanner(Banner banner){
-     return bannerRepository.save(banner);
+    public Banner getOne(Integer id) {
+        return bannerRepository.findItemById(id);
     }
 
-    public  void deleteBanner(String ids){
+
+    public Banner saveBanner(Banner banner) {
+        return bannerRepository.save(banner);
+    }
+
+    public void deleteBanner(String ids) {
         bannerRepository.softDelete(StringUtil.toIntArray(ids));
     }
 

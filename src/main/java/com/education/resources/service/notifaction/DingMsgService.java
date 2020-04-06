@@ -1,14 +1,14 @@
 package com.education.resources.service.notifaction;
 
-import com.alibaba.druid.util.StringUtils;
+
 import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.OapiRobotSendRequest;
 import com.dingtalk.api.response.OapiRobotSendResponse;
 import com.education.resources.bean.notication.DingMsgForm;
 import com.taobao.api.ApiException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

@@ -26,10 +26,10 @@ public class AlsRecallPredict{
         SparkSession spark= SparkSession.builder().master("local").appName("DianpingApp").getOrCreate();
 
         //加载模型进内存
-        ALSModel alsModel = ALSModel.load("C:\\Users\\fz\\recommend\\alsModel");
+        ALSModel alsModel = ALSModel.load("D:\\spark\\recommend\\alsModel");
 
 
-        JavaRDD<String> csvFile = spark.read().textFile("D:\\behavior.csv").toJavaRDD();
+        JavaRDD<String> csvFile = spark.read().textFile("D:\\BaiduNetdiskDownload\\devtool\\devtool\\data\\behavior.csv").toJavaRDD();
 
         JavaRDD<Rating> ratingJavaRDD = csvFile.map(new Function<String, Rating>() {
             @Override
@@ -46,15 +46,12 @@ public class AlsRecallPredict{
         Dataset<Row> userRecs = alsModel.recommendForUserSubset(users, 20);
 
         userRecs.foreachPartition(new ForeachPartitionFunction<Row>() {
-
-
-
             @Override
             public void call(Iterator<Row> t) throws Exception {
 
                 //新建数据库连接
                 Connection connection = DriverManager.
-                        getConnection("jdbc:mysql://localhost:3306/education_resources2?useSSL=false&serverTimezone=GMT&characterEncoding=utf8");
+                        getConnection("jdbc:mysql://localhost:3306/education_resource?user=root&password=root&useSSL=false&serverTimezone=GMT&characterEncoding=utf8");
 
                 PreparedStatement preparedStatement = connection.prepareStatement("insert  into recommend(id,recommend) values (?,?) ");
 

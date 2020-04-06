@@ -3,7 +3,6 @@ package com.education.resources.bean.entity.config;
 import com.education.resources.annotation.ConfigBean;
 import com.education.resources.annotation.ConfigDes;
 import com.education.resources.bean.config.ConfigProperty;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data

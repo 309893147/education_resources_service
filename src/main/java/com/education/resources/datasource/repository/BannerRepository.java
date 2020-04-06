@@ -1,8 +1,6 @@
 package com.education.resources.datasource.repository;
 
 import com.education.resources.bean.entity.Banner;
-import org.apache.ibatis.annotations.Param;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
