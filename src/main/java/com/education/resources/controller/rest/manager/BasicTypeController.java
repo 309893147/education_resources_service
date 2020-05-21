@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/manage/type")
 //@Api(tags = "基础类型设置")
-@PermissionDes
+@PermissionDes(menu = {"资源管理"})
 public class BasicTypeController {
 
     @Autowired
@@ -48,21 +48,21 @@ public class BasicTypeController {
 
     @GetMapping(value = "/resource")
 //    @ApiOperation(value = "资源类型列表")
-    @PermissionDes(menu = {"资源类型管理"}, name = "显示")
+    @PermissionDes(menu = {"教育资源类型"}, name = "显示")
     public API<Page> complaintList(BasicType basicType, PageForm pageForm) {
         return getList(basicType,pageForm);
     }
 
     @PostMapping(value = "/resource")
 //    @ApiOperation(value = "保存资源类型")
-    @PermissionDes(menu = {"资源类型管理"}, name = "增加")
+    @PermissionDes(menu = {"教育资源类型"}, name = "新增")
     public API<BasicType> addComplaint(@RequestBody BasicType basicType) {
         return API.ok(basicTypeService.save(basicType));
     }
 
     @DeleteMapping(value = "/resource")
 //    @ApiOperation(value = "删除资源类型")
-    @PermissionDes(menu = {"资源类型管理"}, name = "删除")
+    @PermissionDes(menu = {"教育资源类型"}, name = "删除")
     public API deleteComplaint(@RequestParam String ids) {
         basicTypeService.delete(ids);
         return API.ok();

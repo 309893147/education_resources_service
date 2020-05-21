@@ -1,6 +1,7 @@
 package com.education.resources.controller.rest.manager;
 
 
+import com.education.resources.annotation.PermissionDes;
 import com.education.resources.bean.auth.ManagerLoginLog;
 import com.education.resources.bean.entity.Log;
 import com.education.resources.bean.entity.meta.MetaData;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 //@Api(tags = "系统管理")
 @RequestMapping("/manage/log")
+@PermissionDes(menu = {"系统管理"})
 public class LogController {
     private LogService logService;
 
@@ -27,7 +29,8 @@ public class LogController {
         this.logService = logService;
     }
 
-//    @ApiOperation("操作日志管理")
+    //    @ApiOperation("操作日志管理")
+    @PermissionDes(menu = {"操作日志管理"}, name = "显示")
     @GetMapping("operation")
     public API<Page<Log>> getOperationLog(Log log, PageForm pageForm) {
         log.setType(Log.Type.OPERATION);
@@ -35,7 +38,6 @@ public class LogController {
     }
 
     @GetMapping("system")
-//    @ApiOperation("系统日志管理")
     public API<Page<Log>> getSystemLog(Log log, PageForm pageForm) {
         log.setType(Log.Type.SYSTEM);
         return API.ok(logService.getLog(log, pageForm));
@@ -43,6 +45,7 @@ public class LogController {
 
     @GetMapping("login")
 //    @ApiOperation("登陆日志管理")
+    @PermissionDes(menu = {"登陆日志管理"}, name = "显示")
     public API<Page<ManagerLoginLog>> getSystemLog(ManagerLoginLog managerLoginLog, PageForm pageForm) {
 
         return API.ok(logService.getLoginLog(managerLoginLog, pageForm));

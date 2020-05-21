@@ -16,18 +16,18 @@ public class Banner extends BaseEntity {
 
     @NotEmpty(message = "标题不能为空")
 //    @ApiModelProperty(value = "轮播标题")
-    @Meta(displayInList = true)
+    @Meta(displayInList = true,displayName = "轮播标题")
     private String title;
 
     @NotEmpty(message = "请设置图片")
 //    @ApiModelProperty(value = "轮播图片")
-    @Meta(displayInList = true)
+    @Meta(displayInList = true,displayName = "轮播图片")
     private String headImg;
 
     @NotEmpty(message = "请输入内容")
 //    @ApiModelProperty(value = "内容")
     @Lob
-    @Meta(displayInList = true)
+    @Meta(displayInList = true,displayName = "内容")
     private String content;
 
 //    @ApiModelProperty(value = "轮播跳转路径")
@@ -35,7 +35,7 @@ public class Banner extends BaseEntity {
 //    private String target;
 
 //    @ApiModelProperty(value = "是否启用")
-    @Meta(displayInList = true)
+    @Meta(displayInList = true,displayName = "是否启用")
     private boolean joinUse;
 
 

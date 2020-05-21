@@ -4,7 +4,7 @@
 //import com.education.resources.bean.entity.config.DingConfig;
 //import com.education.resources.bean.entity.config.SystemConfig;
 //import com.education.resources.bean.from.PageForm;
-//import com.education.resources.bean.pojo.event.DingMessageEvent;
+//import DingMessageEvent;
 //import com.education.resources.datasource.repository.TicketRepository;
 //import com.education.resources.service.config.ConfigService;
 //import com.education.resources.util.jpa.SpecificationUtil;

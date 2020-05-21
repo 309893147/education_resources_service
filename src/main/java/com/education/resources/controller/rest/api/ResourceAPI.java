@@ -3,6 +3,7 @@ package com.education.resources.controller.rest.api;
 import com.education.resources.bean.entity.BasicType;
 import com.education.resources.bean.entity.Resource;
 import com.education.resources.bean.from.PageForm;
+import com.education.resources.bean.from.SearchForm;
 import com.education.resources.service.BasicTypeService;
 import com.education.resources.service.resource.ResouceService;
 import com.education.resources.util.rest.API;
@@ -12,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/resource")
@@ -36,6 +39,13 @@ public class ResourceAPI {
     public API<List<Resource>> getRecommend() {
         return API.ok(resouceService.recommend());
     }
+
+    @PostMapping(value ="search")
+//    @ApiOperation(value = "教育资源搜索")
+    public API<Map<String, Object>> getRecommend(@RequestBody SearchForm searchForm) throws IOException {
+        return API.ok(resouceService.searchEs(searchForm));
+    }
+
 
     @GetMapping(value = "bd")
 //    @ApiOperation(value = "教育资源榜单")

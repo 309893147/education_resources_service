@@ -18,12 +18,12 @@ import javax.persistence.Lob;
 public class Notice extends BaseEntity {
 
 //    @ApiModelProperty(value = "标题")
-    @Meta(displayInList = true,searchable = true)
+    @Meta(displayInList = true,searchable = true,displayName = "标题")
     private String title;
 
     @Lob
 //    @ApiModelProperty(value = "内容")
-    @Meta(displayInList = true)
+    @Meta(displayInList = true,displayName = "内容")
     private String content;
 
 //    private int  readCount = 0;

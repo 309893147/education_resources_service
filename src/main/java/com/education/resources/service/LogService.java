@@ -12,7 +12,6 @@ import com.education.resources.datasource.repository.LogRepository;
 import com.education.resources.datasource.repository.auth.ManagerLoginLogRepository;
 import com.education.resources.util.jpa.SpecificationUtil;
 import com.github.wenhao.jpa.PredicateBuilder;
-import com.github.wenhao.jpa.Specifications;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 

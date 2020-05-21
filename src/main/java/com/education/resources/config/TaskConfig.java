@@ -14,7 +14,7 @@ public class TaskConfig implements SchedulingConfigurer {
         taskRegistrar.setScheduler( new ScheduledThreadPoolExecutor(Runtime.getRuntime().availableProcessors(), new ThreadFactory() {
             @Override
             public Thread newThread(Runnable r) {
-                return new Thread(r,"magic_mirror_schduler");
+                return new Thread(r,"resource_schduler");
             }
         }));
     }

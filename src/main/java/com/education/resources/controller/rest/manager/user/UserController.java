@@ -1,6 +1,7 @@
 package com.education.resources.controller.rest.manager.user;
 
 
+import com.education.resources.annotation.AnonUrl;
 import com.education.resources.annotation.PermissionDes;
 import com.education.resources.bean.entity.ManagerApply;
 import com.education.resources.bean.entity.meta.MetaData;
@@ -32,7 +33,7 @@ public class UserController {
 
     @GetMapping
 //    @ApiOperation(value = "用户列表")
-    @PermissionDes(menu = {"用户列表"}, name = "显示")
+    @PermissionDes(menu = {"用户管理"}, name = "显示")
     public API<Page> getUserList(User user, PageForm pageForm) {
         return API.ok(userService.getUserList(user, pageForm));
     }
@@ -43,7 +44,18 @@ public class UserController {
         return API.ok(userService.getOne(id));
     }
 
-
+    @AnonUrl
+    @GetMapping(value = "faker")
+    public API makeFaker(){
+        userService.makeFaker();
+        return API.ok();
+    }
+    @AnonUrl
+    @GetMapping(value = "faker2")
+    public API makeFaker2(){
+        userService.makeFaker2();
+        return API.ok();
+    }
 
 
 }

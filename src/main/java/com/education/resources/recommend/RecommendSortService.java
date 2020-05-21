@@ -27,8 +27,7 @@ public class RecommendSortService {
     @PostConstruct
     public void init(){
         //加载LR模型
-        spark = SparkSession.builder().master("local").appName("DianpingApp").getOrCreate();
-
+        spark = SparkSession.builder().master("local").appName("education").getOrCreate();
         lrModel = LogisticRegressionModel.load("D:\\spark\\recommend\\lrmode");
         gbtClassificationModel = GBTClassificationModel.load("D:\\spark\\recommend\\gbdtmode");
     }

@@ -18,16 +18,13 @@ public class RecommendService implements Serializable {
     //召回数据,根据userId 召回ResourceList
     public List<Integer> recall(Integer userId){
         Recommend item = recommendRepository.findItemById(userId);
-
         if (item == null){
             item = recommendRepository.findItemById(999999);
         }
-
         String[] resArr = item.getRecommend().split(",");
         List<Integer> resList = new ArrayList<>();
        for (int i = 0;i<resArr.length;i++){
            resList.add(Integer.valueOf(resArr[i]));
-
        }
        return  resList;
     }

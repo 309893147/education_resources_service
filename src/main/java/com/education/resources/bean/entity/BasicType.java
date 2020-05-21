@@ -16,11 +16,11 @@ public class BasicType extends BaseEntity {
 
 
 //    @ApiModelProperty(value = "名称")
-    @Meta(displayInList = true,searchable = true)
+    @Meta(displayInList = true,searchable = true,displayName = "名称")
     private String name;
 
 //    @ApiModelProperty(value = "排序")
-    @Meta(displayInList = true)
+    @Meta(displayInList = true,displayName = "排序")
     private String sort;
 
 //    @ApiModelProperty(value = "图片")

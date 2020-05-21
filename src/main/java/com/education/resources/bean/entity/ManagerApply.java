@@ -23,7 +23,7 @@ public class ManagerApply extends BaseEntity{
     @OneToOne
     @JoinColumn(name = "userId", insertable = false, updatable = false)
 //    @ApiModelProperty(value = "用户")
-    @Meta(displayInList = true)
+    @Meta(displayInList = true,displayName = "用户")
     private User user;
 
     private String mobile;
@@ -31,6 +31,6 @@ public class ManagerApply extends BaseEntity{
     private String password;
 
 //    @ApiModelProperty(value = "申请理由")
-    @Meta(displayInList = true)
+    @Meta(displayInList = true,displayName = "申请理由")
     private String reason;
 }

@@ -21,11 +21,9 @@ import org.apache.spark.sql.types.StructType;
 public class LRTrain {
     public static void main(String[] args) throws IOException {
         //初始化spark运行环境
-        SparkSession spark = SparkSession.builder().master("local").appName("DianpingApp").getOrCreate();
-
+        SparkSession spark = SparkSession.builder().master("local").appName("education").getOrCreate();
         //加载特征及label训练文件
         JavaRDD<String> csvFile = spark.read().textFile("D:\\BaiduNetdiskDownload\\devtool\\devtool\\data\\feature.csv").toJavaRDD();
-
         //做转化
         JavaRDD<Row> rowJavaRDD = csvFile.map(new Function<String, Row>() {
             @Override
@@ -43,29 +41,20 @@ public class LRTrain {
                         new StructField("features",new VectorUDT(),false,Metadata.empty())
                 }
         );
-
         Dataset<Row> data = spark.createDataFrame(rowJavaRDD,schema);
-
         //分开训练和测试集
         Dataset<Row>[] dataArr = data.randomSplit(new double[]{0.8,0.2});
         Dataset<Row> trainData = dataArr[0];
         Dataset<Row> testData = dataArr[1];
-
         LogisticRegression lr = new LogisticRegression().
                 setMaxIter(10).setRegParam(0.3).setElasticNetParam(0.8).setFamily("multinomial");
-
         LogisticRegressionModel lrModel = lr.fit(trainData);
-
         lrModel.save("D:\\spark\\recommend\\lrmode");
-
         //测试评估
         Dataset<Row> predictions =  lrModel.transform(testData);
-
         //评价指标
         MulticlassClassificationEvaluator evaluator = new MulticlassClassificationEvaluator();
         double accuracy = evaluator.setMetricName("accuracy").evaluate(predictions);
-
         System.out.println("auc="+accuracy);
-
     }
 }

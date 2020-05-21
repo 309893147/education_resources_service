@@ -29,36 +29,47 @@ public class ResourceUserDownloadService extends BaseService {
     @Autowired
     ResourceRepository resourceRepository;
 
-    public ResourceUserDownload downloadSuccess(ResourceUserDownload resourceUserDownload){
-        if (resourceUserDownloadRepository.count(Specifications.<ResourceUserDownload>and().eq("userId",resourceUserDownload.getUserId()).eq("resourceId",resourceUserDownload.getResourceId()).build())>0){
+    public ResourceUserDownload downloadSuccess(ResourceUserDownload resourceUserDownload) {
+        if (resourceUserDownloadRepository.count(Specifications.<ResourceUserDownload>and().eq("userId", resourceUserDownload.getUserId()).eq("resourceId", resourceUserDownload.getResourceId()).build()) > 0) {
             return null;
         }
         User user = userRepository.findItemById(getCurrentUser().getId());
-        user.setIntegral(user.getIntegral()-1);
+        user.setIntegral(user.getIntegral() - 1);
         userRepository.save(user);
         return resourceUserDownloadRepository.save(resourceUserDownload);
     }
 
-   public Integer canDownloadResource(){
-       User user = userRepository.findItemById(getCurrentUser().getId());
+    public Integer canDownloadResource() {
+        User user = userRepository.findItemById(getCurrentUser().getId());
 
-       if (user.getIntegral()>1){
-           return 1;
-       }
-       return 0;
-   }
-
-    public Page<ResourceUserDownload> getMyDownloadResource(PageForm pageForm){
-        PredicateBuilder<ResourceUserDownload> spec = Specifications.<ResourceUserDownload>and().eq("userId", getCurrentUser().getId());
-       return resourceUserDownloadRepository.findAll(spec.build(),pageForm.pageRequest());
+        if (user.getIntegral() > 1) {
+            return 1;
+        }
+        return 0;
     }
 
-    public ResourceUserDownload  commentScore(ResourceUserDownload resourceUserDownload){
-//        PredicateBuilder<Resource> spec = Specifications.<Resource>and().eq("id", resourceUserDownload.getResourceId());
-//
-//        List<Resource> resourceL = resourceRepository.findAll(spec.build());
+    public Page<ResourceUserDownload> getMyDownloadResource(PageForm pageForm) {
+        PredicateBuilder<ResourceUserDownload> spec = Specifications.<ResourceUserDownload>and().eq("userId", getCurrentUser().getId());
+        return resourceUserDownloadRepository.findAll(spec.build(), pageForm.pageRequest());
+    }
+
+    public ResourceUserDownload commentScore(ResourceUserDownload resourceUserDownload) {
         resourceUserDownload.setUserId(getCurrentUser().getId());
-       return resourceUserDownloadRepository.save(resourceUserDownload);
+        resourceUserDownload.setPresenceStatus(1);
+        Resource resource = resourceRepository.findItemById(resourceUserDownload.getResourceId());
+        //查找分母
+        Integer count = Math.toIntExact(resourceUserDownloadRepository.count(Specifications.<ResourceUserDownload>and().eq("resourceId", resourceUserDownload.getResourceId()).build()));
+        Integer scoreTotal = resource.getScore() + resourceUserDownload.getScore();
+        if (count > 0) {
+            Integer newCount = count + 1;
+            Integer newScore1 = scoreTotal / newCount;
+            resource.setScore(newScore1);
+        } else {
+            Integer newScore2 = scoreTotal / 2;
+            resource.setScore(newScore2);
+        }
+        resourceRepository.save(resource);
+        return resourceUserDownloadRepository.save(resourceUserDownload);
     }
 
 

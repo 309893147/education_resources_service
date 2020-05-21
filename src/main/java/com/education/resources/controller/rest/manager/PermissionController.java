@@ -15,8 +15,8 @@ import java.util.List;
 
 @RestController
 //@Api(tags = "权限管理")
-@PermissionDes(menu = {"通讯录管理", "通讯录管理"})
 @RequestMapping("/manage/permission")
+@PermissionDes(menu = {"权限管理","管理员列表"})
 public class PermissionController {
 
     @Autowired
@@ -24,12 +24,14 @@ public class PermissionController {
 
 //    @ApiOperation(value = "获取后台权限")
     @GetMapping("/admin")
+    @PermissionDes(name = "编辑权限")
     public API<List<Menu>> getEmployeePermission(Integer id) {
         return API.ok(permissionService.getAllPermission(id,null));
     }
 
 //    @ApiOperation(value = "保存管理员后台权限")
     @PostMapping("/admin")
+    @PermissionDes(name = "保存")
     public API saveEmployeePermission(int id, @RequestBody List<Permission> permissions) {
         permissionService.saveManagerPermission(id, permissions);
         return API.ok();

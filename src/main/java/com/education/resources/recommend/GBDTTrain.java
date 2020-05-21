@@ -19,21 +19,15 @@ import org.apache.spark.sql.types.StructType;
 import java.io.IOException;
 
 public class GBDTTrain {
-
     public static void main(String[] args) {
-
         //初始化spark 运行环境
-        SparkSession sparkSession = SparkSession.builder().master("local").appName("DianpingApp").getOrCreate();
-
+        SparkSession sparkSession = SparkSession.builder().master("local").appName("education").getOrCreate();
         //加载特征以及label 训练文件
-
-        JavaRDD<String> csvFile = sparkSession.read().textFile("D:\\BaiduNetdiskDownload\\devtool\\devtool\\data\\feature.csv").toJavaRDD();
-
+        JavaRDD<String> csvFile = sparkSession.read().textFile("D:\\data\\feature.csv").toJavaRDD();
         //特征转化
         JavaRDD<Row> rowJavaRDD = csvFile.map(new Function<String, Row>() {
             @Override
             public Row call(String v1) throws Exception {
-
                 v1 = v1.replace("\"", "");
                 String[] strArr=v1.split(",");
                 return RowFactory.create(new Double(strArr[11]),Vectors.dense(Double.valueOf(strArr[0]),Double.valueOf(strArr[1])
@@ -43,41 +37,30 @@ public class GBDTTrain {
                 ,Double.valueOf(strArr[8])
                 ,Double.valueOf(strArr[9])
                 ,Double.valueOf(strArr[10]));
-//                ,Double.valueOf(strArr[11])
-//                ,Double.valueOf(strArr[1])
             }
         });
-
         StructType schema = new StructType(
                 new StructField[]{
                         new StructField("label",DataTypes.DoubleType,false, Metadata.empty()),
                         new StructField("features",new VectorUDT(),false, Metadata.empty()),
-
                 }
         );
         Dataset<Row> data = sparkSession.createDataFrame(rowJavaRDD,schema);
-
         //分开训练和测试数据集
         Dataset<Row>[] dataArr = data.randomSplit(new double[]{0.8,0.2});
         Dataset<Row> trainData = dataArr[0];
         Dataset<Row> testData = dataArr[1];
-
         GBTClassifier classifier  = new GBTClassifier().setLabelCol("label").setFeaturesCol("features").setMaxIter(10);
         GBTClassificationModel gbtClassificationModel = classifier.train(trainData);
-
         try {
             gbtClassificationModel.save("D:\\spark\\recommend\\gbdtmode");
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         //测试评估
         Dataset<Row> predications = gbtClassificationModel.transform(testData);
-
         MulticlassClassificationEvaluator evaluator = new MulticlassClassificationEvaluator();
         double accuracy = evaluator.setMetricName("accuracy").evaluate(predications);
         System.out.println("accuracy="+accuracy);
-
-
     }
 }

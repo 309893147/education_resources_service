@@ -22,7 +22,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/manage/manager")
 //@Api(tags = "管理员")
-@PermissionDes(menu = "用户管理")
 public class AuthManagerAPI {
 
     private AuthManagerService userManagerService;
@@ -77,14 +76,12 @@ public class AuthManagerAPI {
 
 //    @ApiOperation("创建管理员")
     @PostMapping
-    @PermissionDes(menu = {"设置管理员"},rewriteMenu = true,name = "创建管理员")
     public API<Manager>  createManager(@RequestBody @Valid CreateManagerForm createManagerForm){
         return API.ok(userManagerService.createManager(createManagerForm,false));
     }
 
 //    @ApiOperation("创建管理员")
     @PostMapping(value = "/user")
-    @PermissionDes(menu = {"设置用户管理员"},rewriteMenu = true,name = "创建用户管理员")
     public API<Manager>  createUserManager(@RequestBody @Valid CreateManagerForm createManagerForm){
         return API.ok(userManagerService.createUserManager(createManagerForm,false));
     }
@@ -93,7 +90,7 @@ public class AuthManagerAPI {
 
 //    @ApiOperation("获取管理员列表")
     @GetMapping
-    @PermissionDes(menu = {"系统设置","设置管理员"},rewriteMenu = true,name = "管理员列表")
+    @PermissionDes(menu = {"权限管理","管理员列表"},rewriteMenu = true,name = "显示")
     public API<Page<Manager>>  getManager(Manager manager, PageForm pageForm){
         return API.ok(userManagerService.getManager(manager,pageForm));
     }
@@ -101,14 +98,14 @@ public class AuthManagerAPI {
 
     @GetMapping(value = "apply")
 //    @ApiOperation(value = "用户列表")
-    @PermissionDes(menu = {"用户列表"}, name = "显示")
+    @PermissionDes(menu = {"权限管理","用户申请管理员列表"},rewriteMenu = true,name = "显示")
     public API<Page<ManagerApply>> getManagerApply(ManagerApply managerApply, PageForm pageForm) {
         return API.ok(userManagerService.getManagerApply(managerApply, pageForm));
     }
 
 //    @ApiOperation("删除管理员")
     @DeleteMapping()
-    @PermissionDes(menu = {"系统设置","设置管理员"},rewriteMenu = true,name = "删除管理员")
+    @PermissionDes(menu = {"权限管理","管理员列表"},rewriteMenu = true,name = "删除")
     public API  deleteManager(@RequestParam String ids){
         userManagerService.deleteManager(ids);
         return API.ok();

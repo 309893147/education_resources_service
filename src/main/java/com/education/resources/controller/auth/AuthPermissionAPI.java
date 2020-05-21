@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
-@PermissionDes(menu = {"系统设置","角色设置"})
 @RestController
 //@Api(tags = "后台角色")
 @RequestMapping("/manage/auth")
@@ -32,7 +31,6 @@ public class AuthPermissionAPI {
     }
 
 //    @ApiOperation("查看所有权限")
-    @PermissionDes(name = "查看所有权限")
     @GetMapping("permission")
     public API<List<Menu>> getAllPermission(@RequestParam(required = false) Integer manager, @RequestParam(required = false) Integer role){
         return API.ok(permissionService.getAllPermission(manager,role));
@@ -41,15 +39,12 @@ public class AuthPermissionAPI {
 
 
 //    @ApiOperation("查看所有角色")
-    @PermissionDes(name = "查看所有角色")
     @GetMapping("/role")
     public API<Page<Role>>  getRoleList(Role role, PageForm pageForm){
-
         return  API.ok(permissionService.getRoleList(role,pageForm));
     }
 
 //    @ApiOperation("删除角色")
-    @PermissionDes(name = "删除角色")
     @DeleteMapping("/role")
     public API<Page<Role>>  deleteRole(@RequestParam String ids){
         permissionService.deleteRole(ids);
@@ -64,7 +59,6 @@ public class AuthPermissionAPI {
     }
 
 //    @ApiOperation("增加角色")
-    @PermissionDes(name = "增加角色")
     @PostMapping("/role")
     public API<Role>  editRole(@RequestBody Role role){
         return API.ok(permissionService.editRole(role));
