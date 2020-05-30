@@ -13,4 +13,6 @@ public class MediaConfig {
     private String managerPath;
     private String staticPath;
     private String templatePath;
+    private String  exportPath;
+
 }

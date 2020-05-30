@@ -2,6 +2,7 @@ package com.education.resources.bean.entity;
 
 import com.education.resources.annotation.DeleteType;
 import com.education.resources.annotation.EditType;
+import com.education.resources.annotation.ExportType;
 import com.education.resources.annotation.Meta;
 import com.education.resources.bean.auth.Manager;
 import com.education.resources.bean.entity.user.User;
@@ -16,7 +17,7 @@ import javax.validation.constraints.NotEmpty;
 @Data
 @Entity
 //@ApiModel(value = "Resource", description = "资源表")
-@Meta(delete = DeleteType.DELETE_BOTH, edit = EditType.EDIT)
+@Meta(delete = DeleteType.DELETE_BOTH, edit = EditType.EDIT,export = ExportType.EXPORT_BOTH)
 public class Resource extends BaseEntity {
 
 //    @ApiModelProperty(value = "资源链接")
@@ -85,7 +86,7 @@ public class Resource extends BaseEntity {
 
 //    @ApiModelProperty(value = "评分")
     @Meta(displayInList = true,displayName = "评分")
-    private Integer score;
+    private Integer score=0 ;
 
 //    @ApiModelProperty(value = "路径")
 //    private String path;
@@ -95,7 +96,7 @@ public class Resource extends BaseEntity {
     @Meta(displayInList = true, searchable = true,displayName = "资源状态")
     private ResourceStatus resourceStatus;
 
-    @Meta(displayInList = true, searchable = true,displayName = "LR || GBDT")
+//    @Meta(displayInList = true, searchable = true,displayName = "LR || GBDT")
     private String operator;
 
     public enum ResourceStatus {

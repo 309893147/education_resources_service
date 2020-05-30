@@ -7,6 +7,7 @@ import com.education.resources.annotation.Meta;
 import com.education.resources.annotation.PermissionDes;
 import com.education.resources.bean.entity.Resource;
 import com.education.resources.bean.entity.meta.MetaData;
+import com.education.resources.bean.from.GetResourceFrom;
 import com.education.resources.bean.from.PageForm;
 import com.education.resources.service.resource.ResouceService;
 import com.education.resources.util.MetaUtils;
@@ -70,6 +71,13 @@ public class ResourceController {
         }
     }
 
+    @GetMapping("export")
+    //    @ApiOperation(value = "新增教育资源")
+    @PermissionDes(name = "导出")
+    public API exportResourceData(GetResourceFrom getResourceFrom) {
+
+            return API.ok(resouceService.exportResourceData(getResourceFrom));
+    }
 
     @DeleteMapping
 //    @ApiOperation(value = "删除教育资源")

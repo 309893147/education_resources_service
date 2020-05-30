@@ -1,13 +1,16 @@
 package com.education.resources.service.resource;
 
 import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
+import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.education.resources.bean.entity.BasicType;
 import com.education.resources.bean.entity.Resource;
 import com.education.resources.bean.entity.user.User;
+import com.education.resources.bean.from.GetResourceFrom;
 import com.education.resources.bean.from.PageForm;
 import com.education.resources.bean.from.SearchForm;
 import com.education.resources.bean.pojo.event.DingMessageEvent;
@@ -16,13 +19,19 @@ import com.education.resources.datasource.mapper.ResourceMapper;
 import com.education.resources.datasource.repository.BasicTypeRepository;
 import com.education.resources.datasource.repository.UserRepository;
 import com.education.resources.datasource.repository.resource.ResourceRepository;
+import com.education.resources.framework.config.MediaConfig;
 import com.education.resources.recommend.RecommendService;
 import com.education.resources.recommend.RecommendSortService;
 import com.education.resources.service.BaseService;
+import com.education.resources.util.DateUtils;
+import com.education.resources.util.MapBuilder;
 import com.education.resources.util.StringUtil;
+import com.education.resources.util.export.ExcelDataBuilder;
+import com.education.resources.util.export.ExcelHeaderBuilder;
 import com.education.resources.util.jpa.SpecificationUtil;
 import com.github.wenhao.jpa.PredicateBuilder;
 import com.github.wenhao.jpa.Specifications;
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.util.EntityUtils;
 import org.elasticsearch.action.search.SearchRequest;
@@ -36,11 +45,14 @@ import org.spark_project.jetty.util.ArrayQueue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -65,6 +77,13 @@ public class ResouceService extends BaseService {
     @Autowired
     BasicTypeRepository basicTypeRepository;
 
+    private MediaConfig mediaConfig;
+
+    private ExecutorService executors;
+    @Autowired
+    public void setMediaConfig(MediaConfig mediaConfig) {
+        this.mediaConfig = mediaConfig;
+    }
 
     public Page<Resource> resourcesPage(Resource resource, PageForm pageForm) {
         PredicateBuilder<Resource> spec = SpecificationUtil.filter(resource);
@@ -259,6 +278,9 @@ public class ResouceService extends BaseService {
 
     public List<Resource> getBdResource(Integer status) {
         PredicateBuilder<Resource> spec = Specifications.<Resource>and().eq("presenceStatus", 1);
+        if (status==null){
+            return resourceMapper.newList();
+        }
         if (status == 1) {
             return resourceMapper.lookList();
         }
@@ -346,24 +368,144 @@ public class ResouceService extends BaseService {
         return exceptionList;
     }
 
-    public Resource wxResourceAdd(Resource resource) {
+    public Map<String, String> exportResourceData(GetResourceFrom getResourceFrom){
+        return  exportData(getResourceFrom.getIds(),new GetExportCallback() {
+            @Override
+            public Page<Resource> getData(int page) {
+                PageForm pageForm = new PageForm(page,100);
+                return getResources(getResourceFrom,pageForm);
+            }
+            @Override
+            public List<List<String>> head() {
+                return new ExcelHeaderBuilder().add("标题","链接","类型","标签","点击数","评分").build();
+            }
+
+            @Override
+            public List<List<Object>> data(List<Resource> resources) {
+
+                return resources.stream().map(it-> new ExcelDataBuilder()
+                        .add(it.getTitle())
+                        .add(it.getLink())
+                        .add(it.getBasicTypeId())
+                        .add(it.getTag())
+                        .add(it.getClickNumber())
+                        .add(it.getScore())
+                        .build()).collect(Collectors.toList());
+            }
+        });
+    }
+
+    public String getLike(String value) {
+        return "%" + value + "%";
+    }
+
+    private Page<Resource> getResources(GetResourceFrom getResourceFrom, PageForm pageForm) {
+        PredicateBuilder<Resource> spec = SpecificationUtil.<Resource>filter(getResourceFrom, pageForm);
+        if (!StringUtils.isEmpty(getResourceFrom.getKeyword())) {
+            Set<Integer> setByResource = resourceRepository.getResourceByKeyWord(getLike(getResourceFrom.getKeyword()));
+            if (setByResource.size() == 0) {
+                return new PageImpl<>(new ArrayList<>());
+            }
+            spec.in("id", setByResource.toArray());
+        }
+        return resourceRepository.findAll(spec.build(), pageForm.pageRequest());
+    }
+
+
+
+    public Map<String, String> exportData(String ids, GetExportCallback callback) {
+        String fileName = System.currentTimeMillis() + ".xlsx";
+        String path = DateUtils.getDatePath();
+        File pathFile = new File(mediaConfig.getExportPath() + path + File.separator);
+        if (!pathFile.exists()) {
+            pathFile.mkdirs();
+        }
+        String downloadPath = File.separator + "export" + File.separator + path + File.separator + fileName;
+        String savePath = pathFile.getAbsolutePath() + "/" + fileName;
+        ExcelWriter excelWriter = EasyExcel.write(savePath).head(callback.head()).build();
+        WriteSheet writeSheet = EasyExcel.writerSheet().build();
+        int page = 0;
+        if (!StringUtils.isEmpty(ids)) {
+            List<Resource> resources = resourceRepository.findAll(Specifications.<Resource>and().in("id", StringUtil.toIntArray(ids)).build());
+            excelWriter.write(callback.data(resources), writeSheet);
+            excelWriter.finish();
+            return new MapBuilder<String, String>().put("url", downloadPath).build();
+        } else {
+
+            Page<Resource> pageData = callback.getData(page);
+            excelWriter.write(callback.data(pageData.getContent()), writeSheet);
+            if (pageData.getTotalElements() > 3) {
+                executors.execute(new ExportTask( downloadPath, excelWriter, pageData, callback, writeSheet));
+                return new MapBuilder<String, String>().put("msg", "已进入后台导出,稍后请在消息中心查看").build();
+            } else {
+                while (!pageData.isLast()) {
+                    page += 1;
+                    pageData = callback.getData(page);
+                    excelWriter.write(callback.data(pageData.getContent()), writeSheet);
+                }
+                excelWriter.finish();
+                return new MapBuilder<String, String>().put("url", downloadPath).build();
+            }
+        }
+
+    }
+
+    public interface GetExportCallback {
+        Page<Resource> getData(int page);
+
+        List<List<String>> head();
+
+        List<List<Object>> data(List<Resource> tickets);
+    }
+
+    class ExportTask implements Runnable {
+        private final String downloadPath;
+        //        private final List<Integer> manageable;
+//        private Integer employeeId;
+        private ExcelWriter excelWriter;
+        private Page<Resource> pageData;
+        private GetExportCallback callback;
+        private WriteSheet writeSheet;
+        private int page = 0;
+
+        ExportTask(String downloadPath, ExcelWriter excelWriter, Page<Resource> pageData, GetExportCallback callback, WriteSheet writeSheet) {
+            this.excelWriter = excelWriter;
+//            this.employeeId = employeeId;
+            this.pageData = pageData;
+            this.callback = callback;
+            this.writeSheet = writeSheet;
+            this.downloadPath = downloadPath;
+        }
+
+        @Override
+        public void run() {
+            while (!pageData.isLast()) {
+                page += 1;
+                pageData = callback.getData(page);
+                excelWriter.write(callback.data(pageData.getContent()), writeSheet);
+            }
+            excelWriter.finish();
+//            sendEvent(ResourceMessage.builder().employeeId(employeeId).type(UserMessage.Type.EXPORT).content("导出已完成,<a target=\"_blank\" href=\"" + downloadPath + "\">点击此处下载</a>").build());
+        }
+    }
+
+        public Resource wxResourceAdd(Resource resource) {
 //        resource.setPresenceStatus(1);
-        resource.setUserId(getCurrentUser().getId());
-        resource.setResourceStatus(Resource.ResourceStatus.UNPROCESSED);
-        sendEvent(DingMessageEvent.builder().content("\n用户:" + getCurrentUser().getNickName() + "添加了资源:\n" + resource.getTitle() + "\n请管理员尽快处理").build());
-        return resourceRepository.save(resource);
-    }
+            resource.setUserId(getCurrentUser().getId());
+            resource.setResourceStatus(Resource.ResourceStatus.UNPROCESSED);
+            sendEvent(DingMessageEvent.builder().content("\n用户:" + getCurrentUser().getNickName() + "添加了资源:\n" + resource.getTitle() + "\n请管理员尽快处理").build());
+            return resourceRepository.save(resource);
+        }
 
 
-    public void resourceDelete(String ids) {
-        resourceRepository.softDelete(StringUtil.toIntArray(ids));
-    }
+        public void resourceDelete(String ids) {
+            resourceRepository.softDelete(StringUtil.toIntArray(ids));
+        }
 
-    public void resourceDelete(Integer id) {
-        Resource item = resourceRepository.findItemById(id);
-        item.setPresenceStatus(0);
-        resourceRepository.save(item);
-    }
-
+        public void resourceDelete(Integer id) {
+            Resource item = resourceRepository.findItemById(id);
+            item.setPresenceStatus(0);
+            resourceRepository.save(item);
+        }
 
 }

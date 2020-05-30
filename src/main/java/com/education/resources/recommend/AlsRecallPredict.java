@@ -33,7 +33,7 @@ public class AlsRecallPredict{
         });
         Dataset<Row> rating = spark.createDataFrame(ratingJavaRDD, Rating.class);
         //给5个用户做离线的召回结果预测
-        Dataset<Row> users = rating.select(alsModel.getUserCol()).distinct().limit(5);
+        Dataset<Row> users = rating.select(alsModel.getUserCol()).distinct().limit(6);
         Dataset<Row> userRecs = alsModel.recommendForUserSubset(users, 20);
         userRecs.foreachPartition(new ForeachPartitionFunction<Row>() {
             @Override
